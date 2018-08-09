@@ -31,20 +31,24 @@ library(LiDARforestR)
 Once the pacakge is loaded in your R session, this is the an example of how to use the functions in this package
 to estimate LAD and LAI:
 
-*Convert .laz or .las files into a list of voxelized lidar arrays*
-`laz.data <- laz.to.array("./Data/laz_files", 10, 1)`
+```
+# Convert .laz or .las files into a list of voxelized lidar arrays*
+laz.data <- laz.to.array("./Data/laz_files", 10, 1)
 
-#### Level each voxelized array in the list to mimic a canopy height model
-`level.canopy <- canopy.height.levelr(laz.data)`
+# Level each voxelized array in the list to mimic a canopy height model
+level.canopy <- canopy.height.levelr(laz.data)
 
-#### Estimate LAD for each voxel in leveled array in the list 
-`lad.estimates <- MacHorn.LAD(level.canopy, 1, NULL)`
+# Estimate LAD for each voxel in leveled array in the list 
+lad.estimates <- MacHorn.LAD(level.canopy, 1, NULL)
 
-#### Convert the list of LAD arrays into a single raster stack
-`lad.raster <- lad.array.to.raster.stack(lad.estimates, 32618)`
+# Convert the list of LAD arrays into a single raster stack
+lad.raster <- lad.array.to.raster.stack(lad.estimates, 32618)
 
-#### Create a single LAI raster from the LAD raster stack
-`lai.raster <- raster::calc(lad.raster, fun = sum, na.rm = TRUE)`
+# Create a single LAI raster from the LAD raster stack
+lai.raster <- raster::calc(lad.raster, fun = sum, na.rm = TRUE)
+```
+
+
 
 ### And coding style tests
 
