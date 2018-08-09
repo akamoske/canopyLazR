@@ -1,10 +1,3 @@
-#----------------------------------------------MacHORN.LAD FUNCTION--------------------------------------------------------------#
-
-#this function takes in a lidar array and calculates leaf area density using the methodology described in the associated 
-#article. the sum of each column is equal to the LAI of that raster cell.
-
-#--------------------------------------------------------------------------------------------------------------------------------#
-
 #' Convert a lidar array into an array of LAD estimates
 #' 
 #' This function reads in the lidar array created with the laz.to.array function and uses the MacArthur and Horn method to 
