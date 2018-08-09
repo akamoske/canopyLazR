@@ -34,9 +34,9 @@ laz.to.array <- function(laz.files.path, voxel.resolution, z.resolution) {
     laz.xyz <- laz.xyz.table[laz.xyz.table$class != "7",]
     
     #lets create some boundary information for the x,y,z columns
-    x.range.raw <- range(laz.xyz[,"x"], na.rm=T)
-    y.range.raw <- range(laz.xyz[,"y"], na.rm=T)
-    z.range.raw <- range(laz.xyz[,"z"], na.rm=T)
+    x.range.raw <- range(laz.xyz[,1])
+    y.range.raw <- range(laz.xyz[,2])
+    z.range.raw <- range(laz.xyz[,3])
     
     #lets set how big we want each pixel to be, in this case 2x2x2
     x.y.grain <- voxel.resolution
