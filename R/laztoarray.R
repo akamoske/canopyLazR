@@ -34,7 +34,7 @@ laz.to.array <- function(laz.files.path, voxel.resolution, z.resolution) {
     laz.xyz <- laz.xyz.table[laz.xyz.table$class != "7",]
     
     #lets create some boundary information for the x,y,z columns
-    x.range.raw <- range(laz.xyz[["x"]], na.rm=T)
+    x.range.raw <- range(laz.xyz[,1], na.rm=T)
     y.range.raw <- range(laz.xyz[,2], na.rm=T)
     z.range.raw <- range(laz.xyz[,3], na.rm=T)
     
