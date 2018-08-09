@@ -40,9 +40,12 @@ library(devtools)
 
 # Install LiDARforestR from GitHub
 install_github("akamoske/LiDARforestR")
+
+# Load the library
+library(LiDARforestR)
 ```
 
-Once the package is installed in your R session, you should be able to load all functions.
+Now all functions should be available.
 
 ## Example of usage (after installation)
 
