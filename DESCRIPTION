@@ -6,5 +6,6 @@ Description: This package use the MacArthur and Horn method to estimate LAD and 
 Depends: fields, plyr, rlas, raster
 License: GPL-2 + file LICENSE
 Encoding: UTF-8
-LazyData: true
+LazyData: FALSE
+LazyLoad: yes
 RoxygenNote: 6.0.1
