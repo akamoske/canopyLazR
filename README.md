@@ -27,7 +27,7 @@ Dr. Scott C. Stark
 
 scott.c.stark@gmail.com   
 
-### Installation
+## Installation
 
 The easiest way to install `LiDARforestR` is via `install_github` from the `devtools` package:
 
