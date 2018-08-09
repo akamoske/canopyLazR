@@ -5,6 +5,24 @@ R package to estimate leaf area density (LAD) and leaf area index (LAI) from air
 
 The theory behind this R package is described in *Kamoske A.G., Dahlin K.M., Stark S.C., and Serbin S.P. 2018. Leaf area density from airborne LiDAR: Comparing sensors and resolutions in a forest ecosystem. In preparation for submission to Forest Ecology and Management.*
 
+## Authors
+
+### Corresponding Author
+
+Aaron G. Kamoske, PhD Student   
+[Michigan State University, Department of Geography](http://geo.msu.edu/)      
+[ERSAM Lab](https://www.ersamlab.com/)   
+
+akamoske@gmail.com
+
+Code created by: Aaron G. Kamoske
+
+### Contributing Authors
+
+Dr. Scott C. Stark
+[Michigan State University, Department of Forestry](https://www.canr.msu.edu/for/)      
+[Tropical Forestry Ecology Lab](https://sites.google.com/site/scottcstarktropicalforest/) 
+
 ### Installation
 
 The easiest way to install `LiDARforestR` is via `install_github` from the `devtools` package:
@@ -48,21 +66,7 @@ lad.raster <- lad.array.to.raster.stack(lad.estimates, 32618)
 lai.raster <- raster::calc(lad.raster, fun = sum, na.rm = TRUE)
 ```
 
-## Authors
 
-### Corresponding Author
-
-Aaron G. Kamoske, PhD Student   
-[Michigan State University, Department of Geography](http://geo.msu.edu/)      
-[ERSAM Lab](https://www.ersamlab.com/)   
-
-akamoske@gmail.com
-
-### Contributing Authors
-
-Dr. Scott C. Stark
-[Michigan State University, Department of Forestry](https://www.canr.msu.edu/for/)      
-[Tropical Forestry Ecology Lab](https://sites.google.com/site/scottcstarktropicalforest/) 
 
 
 - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
