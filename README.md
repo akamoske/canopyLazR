@@ -70,11 +70,6 @@ lad.raster <- lad.array.to.raster.stack(lad.estimates, 32618)
 lai.raster <- raster::calc(lad.raster, fun = sum, na.rm = TRUE)
 ```
 
-## Acknowledgments
-
-* Cats that sit on your computer when trying to code   
-* Tall trees 
-
 ## License
 
 This project is licensed under the GNU GPUv2 License - see the [LICENSE.md](LICENSE.md) file for details
