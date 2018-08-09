@@ -15,12 +15,11 @@ laz.to.array <- function(laz.files.path, voxel.resolution, z.resolution) {
   laz.list <- list()
   
   #list all the files in the path
-  #laz.files.list <- list.files(laz.files.path, full.names = TRUE)
-  laz.files.list <- list.files(laz.files.path, pattern="\\.laz$", full.names = TRUE) # hard-coded extension.  Is this what we want? Or an option at function call?
+  laz.files.list <- list.files(laz.files.path, pattern=c("\\.laz$|.las$"), full.names = TRUE)
   
   #loop through the files so that we can use memory management techniques
   for (i in 1:length(laz.files.list)) {
-    
+    print(paste0("Processing: ",laz.files.list[i]))
     #save the first file in the loop as a new variable
     laz.file <- laz.files.list[i]
     
@@ -28,8 +27,8 @@ laz.to.array <- function(laz.files.path, voxel.resolution, z.resolution) {
     laz.data <- rlas::readlasdata(laz.file)
     
     #convert into a x,y,z, class table for easy reading and analysis
-    laz.xyz.table <- as.data.frame(c(laz.data[,"X"], laz.data[,"Y"], laz.data[,"Z"], laz.data[,"Classification"]), 
-                                   col.names = c("x", "y", "z", "class"))
+    laz.xyz.table <- as.data.frame(cbind(x=laz.data$X, y=laz.data$Y, 
+                                   z=laz.data$Z, class=laz.data$Classification))
     
     #lets remove the points classified as noise
     laz.xyz <- laz.xyz.table[laz.xyz.table$class != "7",]
