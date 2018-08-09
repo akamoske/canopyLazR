@@ -3,7 +3,7 @@
 
 R package to estimate leaf area density (LAD) and leaf area index (LAI) from airborne LiDAR point clouds.
 
-This R package is associated with Kamoske et al 2018 which is currently in review.
+The theory behind this R package is described in *Kamoske A, Dahlin K, Stark S, and Serbin S. 2018. Leaf area density from airborne LiDAR: Comparing sensors and resolutions in a forest ecosystem. In preparation for submission to Forest Ecology and Management.*
 
 ### Installation
 
