@@ -52,11 +52,9 @@ lai.raster <- raster::calc(lad.raster, fun = sum, na.rm = TRUE)
 
 ### Corresponding Author
 
-Aaron Kamoske 
-
-PhD Student
-Michigan State University, Department of Geography
-[ERSAM Lab](https://www.ersamlab.com/)
+Aaron Kamoske, PhD Student   
+[Michigan State University, Department of Geography](http://geo.msu.edu/)      
+[ERSAM Lab](https://www.ersamlab.com/)   
 
 akamoske@gmail.com
 
