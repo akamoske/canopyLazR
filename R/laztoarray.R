@@ -31,14 +31,14 @@ laz.to.array <- function(laz.files.path, voxel.resolution, z.resolution) {
                                    col.names = c("x", "y", "z", "class"))
     
     #lets remove the points classified as noise
-    laz.xyz <- laz.xyz.table[laz.xyz.table$class != "7",]
+    #laz.xyz <- laz.xyz.table[laz.xyz.table$class != "7",]
     
     #lets create some boundary information for the x,y,z columns
     x.range.raw <- range(laz.xyz[,1])
     y.range.raw <- range(laz.xyz[,2])
     z.range.raw <- range(laz.xyz[,3])
     
-    #lets set how big we want each pixel to be, in this case 2x2x2
+    #lets set how big we want each pixel to be
     x.y.grain <- voxel.resolution
     z.grain <- z.resolution
     
