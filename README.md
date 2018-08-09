@@ -78,7 +78,6 @@ This project is licensed under the GNU GPUv2 License - see the [LICENSE.md](LICE
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* Cats that sit on your computer when trying to code   
+* Tall trees 
 
