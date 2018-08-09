@@ -56,8 +56,9 @@ Aaron Kamoske
 
 PhD Student
 Michigan State University, Department of Geography
+[ERSAM Lab](https://www.ersamlab.com/)
 
-(akamoske@gmail.com)
+akamoske@gmail.com
 
 
 
