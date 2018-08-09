@@ -49,7 +49,6 @@ laz.to.array <- function(laz.files.path, voxel.resolution, z.resolution) {
     z.range <- c(floor(z.range.raw[1] / z.grain) * z.grain, ceiling(z.range.raw[2] / z.grain) * z.grain)
     
     #lets create the bins that will be used as cells later on
-    #this creates a 2x2 bin for the x and y axis and a 2x2x2 bin for the z axis
     x.bin <- seq(x.range[1], x.range[2], x.y.grain)
     y.bin <- seq(y.range[1], y.range[2], x.y.grain)
     z.bin <- seq(z.range[1], z.range[2], z.grain)

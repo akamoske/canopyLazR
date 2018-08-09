@@ -50,7 +50,7 @@ Once the pacakge is loaded in your R session, this is the an example of how to u
 to estimate LAD and LAI:
 
 ```
-# Convert .laz or .las files into a list of voxelized lidar arrays*
+# Convert .laz or .las files into a list of voxelized lidar arrays
 laz.data <- laz.to.array("./Data/laz_files", 10, 1)
 
 # Level each voxelized array in the list to mimic a canopy height model
