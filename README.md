@@ -24,18 +24,26 @@ Once the package is installed in your R session, you should be able to load it l
 library(LiDARforestR)
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+## Example of usage (after installation)
 
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+Once the pacakge is loaded in your R session, this is the an example of how to use the functions in this package
+to estimate LAD and LAI:
 
 ```
-Give an example
+# convert .laz or .las files into a list of voxelized lidar arrays
+laz.data <- laz.to.array("./Data/laz_files", 10, 1)
+
+# level the list of voxelized arrays to mimic a canopy height model
+level.canopy <- canopy.height.levelr(laz.data)
+
+# estimate lad from the list of leveled voxelized arrays
+lad.estimates <- MacHorn.LAD(level.canopy, 1, NULL)
+
+# convert the list of lad arrays into a single raster stack
+lad.raster <- lad.array.to.raster.stack(lad.estimates, 32618)
+
+# create a single lai raster from the lad raster stack
+lai.raster <- raster::calc(lad.raster, fun = sum, na.rm = TRUE)
 ```
 
 ### And coding style tests
