@@ -10,7 +10,7 @@
 #' @return A list of voxelized arrays
 #' @export
 laz.to.array <- function(laz.files.path, voxel.resolution, z.resolution) {
-
+  
   #create an empty list
   laz.list <- list()
   
@@ -31,21 +31,28 @@ laz.to.array <- function(laz.files.path, voxel.resolution, z.resolution) {
                                    col.names = c("x", "y", "z", "class"))
     
     #lets remove the points classified as noise
-    laz.xyz <- as.data.frame(laz.xyz.table[laz.xyz.table$class != "7",])
-   
-    #lets create some boundary information for the x,y,z columns
-    x.range <- range(laz.xyz$x, na.rm = TRUE)
-    y.range <- range(laz.xyz$y, na.rm = TRUE)
-    z.range <- range(laz.xyz$z, na.rm = TRUE)
+    laz.xyz <- laz.xyz.table[laz.xyz.table$class != "7",]
     
-    #lets set how big we want each pixel to be
+    #lets create some boundary information for the x,y,z columns
+    x.range.raw <- range(laz.xyz[,1], na.rm=T)
+    y.range.raw <- range(laz.xyz[,2], na.rm=T)
+    z.range.raw <- range(laz.xyz[,3], na.rm=T)
+    
+    #lets set how big we want each pixel to be, in this case 2x2x2
     x.y.grain <- voxel.resolution
     z.grain <- z.resolution
     
+    #this is kind of repetitive, but makes sure that there are no rounding issues, thus any number
+    #with a decimal is rounded down (floor) or up (ceiling), this helps elimate edge weirdness and cell size issues
+    x.range <- c(floor(x.range.raw[1] / x.y.grain) * x.y.grain, ceiling(x.range.raw[2] / x.y.grain) * x.y.grain)
+    y.range <- c(floor(y.range.raw[1] / x.y.grain) * x.y.grain, ceiling(y.range.raw[2] / x.y.grain) * x.y.grain)
+    z.range <- c(floor(z.range.raw[1] / z.grain) * z.grain, ceiling(z.range.raw[2] / z.grain) * z.grain)
+    
     #lets create the bins that will be used as cells later on
-    x.bin <- seq(floor(x.range[1]), ceiling(x.range[2]), x.y.grain)
-    y.bin <- seq(floor(y.range[1]), ceiling(y.range[2]), x.y.grain)
-    z.bin <- seq(floor(z.range[1]), ceiling(z.range[2]), z.grain)
+    #this creates a 2x2 bin for the x and y axis and a 2x2x2 bin for the z axis
+    x.bin <- seq(x.range[1], x.range[2], x.y.grain)
+    y.bin <- seq(y.range[1], y.range[2], x.y.grain)
+    z.bin <- seq(z.range[1], z.range[2], z.grain)
     
     #find the idex number for each lidar pulse so that that pulse can be placed in the appropriate bin
     #rounding to the middle point of the pixel, this assigns a value to each lidar point
