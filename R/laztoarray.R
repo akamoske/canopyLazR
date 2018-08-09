@@ -32,6 +32,7 @@ laz.to.array <- function(laz.files.path, voxel.resolution, z.resolution) {
     
     #lets remove the points classified as noise
     #laz.xyz <- laz.xyz.table[laz.xyz.table$class != "7",]
+    laz.xyz <- laz.xyz.table
     
     #lets create some boundary information for the x,y,z columns
     x.range.raw <- range(laz.xyz[,1])
