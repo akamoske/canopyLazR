@@ -15,7 +15,8 @@ laz.to.array <- function(laz.files.path, voxel.resolution, z.resolution) {
   laz.list <- list()
   
   #list all the files in the path
-  laz.files.list <- list.files(laz.files.path, full.names = TRUE)
+  #laz.files.list <- list.files(laz.files.path, full.names = TRUE)
+  laz.files.list <- list.files(laz.files.path, pattern="\\.laz$", full.names = TRUE) # hard-coded extension.  Is this what we want? Or an option at function call?
   
   #loop through the files so that we can use memory management techniques
   for (i in 1:length(laz.files.list)) {
