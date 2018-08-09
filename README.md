@@ -8,13 +8,20 @@ R package to estimate leaf area density (LAD) and leaf area index (LAI) from air
 The easiest way to install `LiDARforestR` is via `install_github` from the `devtools` package:
 
 ```
-Give the example
+# If you haven't already installed this package and its dependencies
+install.packages("devtools")
+
+# If you alread have devtools installed or just installed it
+library(devtools)
+
+# Install LiDARforestR from GitHub
+install_github("akamoske/LiDARforestR")
 ```
 
-And repeat
+Once the package is installed in your R session, you should be able to load it like this:
 
 ```
-until finished
+library(LiDARforestR)
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
