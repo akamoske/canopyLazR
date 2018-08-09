@@ -5,9 +5,9 @@ R package to estimate leaf area density (LAD) and leaf area index (LAI) from air
 
 The theory behind this R package is described in:   
 
-*Kamoske A.G., Dahlin K.M., Stark S.C., and Serbin S.P. 2018. Leaf area density from airborne LiDAR: Comparing sensors and resolutions in a forest ecosystem. In preparation for submission to Forest Ecology and Management.*
+**_Kamoske A.G., Dahlin K.M., Stark S.C., and Serbin S.P. 2018. Leaf area density from airborne LiDAR: Comparing sensors and resolutions in a forest ecosystem. In preparation for submission to Forest Ecology and Management._**
 
-**_Code written by: Aaron G. Kamoske_**
+*Code written by: Aaron G. Kamoske*
 
 ## Authors
 
@@ -72,16 +72,9 @@ lad.raster <- lad.array.to.raster.stack(lad.estimates, 32618)
 lai.raster <- raster::calc(lad.raster, fun = sum, na.rm = TRUE)
 ```
 
-
-
-
-- *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU GPUv2 License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
