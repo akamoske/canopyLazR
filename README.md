@@ -1,7 +1,9 @@
 
 # LiDARforestR
 
-R package to estimate leaf area density (LAD) and leaf area index (LAI) from airborne LiDAR point clouds
+R package to estimate leaf area density (LAD) and leaf area index (LAI) from airborne LiDAR point clouds.
+
+This R package is associated with Kamoske et al 2018 which is currently in review.
 
 ### Installation
 
