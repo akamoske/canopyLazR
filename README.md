@@ -52,7 +52,16 @@ lai.raster <- raster::calc(lad.raster, fun = sum, na.rm = TRUE)
 
 ### Corresponding Author
 
-* **Aaron Kamoske** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+Aaron Kamoske 
+
+PhD Student
+Michigan State University, Department of Geography
+
+(akamoske@gmail.com)
+
+
+
+- *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
