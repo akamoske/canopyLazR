@@ -9,7 +9,7 @@ The theory behind this R package is described in *Kamoske A.G., Dahlin K.M., Sta
 
 ### Corresponding Author
 
-[Aaron G. Kamoske, PhD Student](akamoske@gmail.com)   
+Aaron G. Kamoske, PhD Student
    
 [Michigan State University, Department of Geography](http://geo.msu.edu/)      
 [ERSAM Lab](https://www.ersamlab.com/)   
@@ -22,6 +22,7 @@ Dr. Scott C. Stark
    
 [Michigan State University, Department of Forestry](https://www.canr.msu.edu/for/)      
 [Tropical Forestry Ecology Lab](https://sites.google.com/site/scottcstarktropicalforest/)   
+
 scott.c.stark@gmail.com   
 
 ### Installation
