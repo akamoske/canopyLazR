@@ -60,7 +60,7 @@ laz.data <- laz.to.array("./Data/laz_files", 10, 1)
 level.canopy <- canopy.height.levelr(laz.data)
 
 # Estimate LAD for each voxel in leveled array in the list 
-lad.estimates <- MacHorn.LAD(level.canopy, 1, NULL)
+lad.estimates <- machorn.lad(level.canopy, 1, NULL)
 
 # Convert the list of LAD arrays into a single raster stack
 lad.raster <- lad.array.to.raster.stack(lad.estimates, 32618)
