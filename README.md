@@ -52,12 +52,17 @@ lai.raster <- raster::calc(lad.raster, fun = sum, na.rm = TRUE)
 
 ### Corresponding Author
 
-Aaron Kamoske, PhD Student   
+Aaron G. Kamoske, PhD Student   
 [Michigan State University, Department of Geography](http://geo.msu.edu/)      
 [ERSAM Lab](https://www.ersamlab.com/)   
 
 akamoske@gmail.com
 
+### Contributing Authors
+
+Dr. Scott C. Stark
+[Michigan State University, Department of Forestry](https://www.canr.msu.edu/for/)      
+[Tropical Forestry Ecology Lab](https://sites.google.com/site/scottcstarktropicalforest/) 
 
 
 - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
