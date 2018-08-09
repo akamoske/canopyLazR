@@ -29,6 +29,7 @@ library(LiDARforestR)
 Once the pacakge is loaded in your R session, this is the an example of how to use the functions in this package
 to estimate LAD and LAI:
 
+#### Convert .laz or .las files into a list of voxelized lidar arrays
 ```
 # convert .laz or .las files into a list of voxelized lidar arrays
 laz.data <- laz.to.array("./Data/laz_files", 10, 1)
