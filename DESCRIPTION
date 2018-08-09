@@ -1,7 +1,7 @@
 Package: LiDARforestR
 Title: R library for estimating leaf area density (LAD) and leaf area index (LAI) from airborne LiDAR point clouds
 Version: 1.0
-Authors@R: c(person("Aaron", "Kamoske", email = "akamoske@gmail.com", role = c("aut", "cre")), person("Scott", "Stark", email = "scott.c.stark@gmail.com", role = "ctb"))
+Authors: c(person("Aaron", "Kamoske", email = "akamoske@gmail.com", role = c("aut", "cre")), person("Scott", "Stark", email = "scott.c.stark@gmail.com", role = "ctb"))
 Description: This package use the MacArthur and Horn method to estimate LAD and LAI from airborn LiDAR point clouds. Detailed information about this code and its purpose can be found in Kamoske et al. 2018.
 Depends: fields, plyr, rlas, raster
 License: GPL-2 + file LICENSE
