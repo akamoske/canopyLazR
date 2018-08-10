@@ -13,20 +13,23 @@ The theory behind this R package is described in:
 
 Code written by: Aaron G. Kamoske, PhD Student
    
-[Michigan State University, Department of Geography](http://geo.msu.edu/)      
-[ERSAM Lab](https://www.ersamlab.com/)   
-
-akamoske@gmail.com
+  + [Michigan State University, Department of Geography](http://geo.msu.edu/)      
+  + [ERSAM Lab](https://www.ersamlab.com/)   
+  + akamoske@gmail.com
 
 ### Contributing Authors
 
-Dr. Scott C. Stark
+Scott C. Stark
    
   + [Michigan State University, Department of Forestry](https://www.canr.msu.edu/for/)      
   + [Tropical Forestry Ecology Lab](https://sites.google.com/site/scottcstarktropicalforest/)   
+  + scott.c.stark@gmail.com  
+  
+Shawn P. Serbin
 
-  + scott.c.stark@gmail.com   
-
+  + [Brookhaven National Laboratory, Environmental and Climate Sciences Department](https://www.bnl.gov/envsci/bio/serbin-shawn.php)
+  + sserbin@bnl.gov
+  
 ## Installation
 
 The easiest way to install `LiDARforestR` is via `install_github` from the `devtools` package:
