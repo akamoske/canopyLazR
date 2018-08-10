@@ -66,7 +66,9 @@ level.canopy <- canopy.height.levelr(laz.data)
 lad.estimates <- machorn.lad(level.canopy, 1, NULL)
 
 # Convert the list of LAD arrays into a single raster stack
-lad.raster <- lad.array.to.raster.stack(lad.estimates, 32618)
+lad.raster <- lad.array.to.raster.stack(lad.array.list = lad.estimates, 
+laz.array.list = laz.data, 
+epsg.code = 32618)
 
 # Create a single LAI raster from the LAD raster stack
 lai.raster <- raster::calc(lad.raster, fun = sum, na.rm = TRUE)
