@@ -52,7 +52,7 @@ Now all functions should be available.
 
 ## Example of usage (after installation)
 
-Once the pacakge is loaded in your R session, this is the an example of how to use the functions in this package
+Once the package is loaded into your R session, this is the an example of how to use the functions in this package
 to estimate LAD and LAI:
 
 ```
