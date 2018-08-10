@@ -18,5 +18,5 @@ in the laz.to.array function
 \description{
 This function reads in a list of voxelized arrays, converts each one to a raster stack, and then merges them all together
 to form a raster stack of the entire study area. This function also creats a lot of extra NA layers in the raster stack so that
-#this individual rasters can easily be merged together.
+the individual rasters can easily be merged together.
 }

@@ -67,6 +67,9 @@ lad.raster <- lad.array.to.raster.stack(lad.estimates, 32618)
 
 # Create a single LAI raster from the LAD raster stack
 lai.raster <- raster::calc(lad.raster, fun = sum, na.rm = TRUE)
+
+# Generate a quick raster plot of the resulting total canopy LAI values for each pixel
+plot(lai.raster)
 ```
 
 ## License

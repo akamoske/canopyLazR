@@ -2,7 +2,7 @@
 #' 
 #' This function reads in a list of voxelized arrays, converts each one to a raster stack, and then merges them all together
 #' to form a raster stack of the entire study area. This function also creats a lot of extra NA layers in the raster stack so that
-#' #this individual rasters can easily be merged together.
+#' the individual rasters can easily be merged together.
 #' 
 #' @param lad.array.list List of voxelized LAD arrays that was created with the machorn.lad function
 #' @param epsg.code EPSG code so that the rasters can be projected into the appropriate projection
@@ -16,7 +16,7 @@ lad.array.to.raster.stack <- function(lad.array.list, epsg.code) {
   lad.rstack.list <- list()
   
   #lets loop through the list of LAD arrays so that we can do some stuff to all of them
-  for (z in 1:length(lad.array.list)) {
+  for (z in seq_along(1:length(lad.array.list))) {
     
     #lets pull out the first array in the list
     testr <- lad.array.list[[z]]$rLAD
@@ -25,13 +25,13 @@ lad.array.to.raster.stack <- function(lad.array.list, epsg.code) {
     lad.mat <- list()
     
     #lets loop through all the rows of data in the array
-    for (i in 1:dim(testr)[1]) {
+    for (i in seq_along(1:dim(testr)[1])) {
       
       #Lets create an empty matrix that corresponses with this row of data
       m.lad <- matrix(data = NA, nrow = dim(testr)[2], ncol = dim(testr)[3])
       
       #lets loop through all the slices of data in the array
-      for (q in 1:dim(testr)[3]) {
+      for (q in seq_along(1:dim(testr)[3])) {
         
         #lets assign a new column in the matrix as the row of data in that slice
         #this will end up representing an indivdual column of of data at a given height in the canopy
@@ -47,7 +47,7 @@ lad.array.to.raster.stack <- function(lad.array.list, epsg.code) {
     raw.lad.rasters <- list()
     
     #lets loop through the list of matrixes that we just created
-    for(f in 1:length(lad.mat)){
+    for(f in seq_along(1:length(lad.mat))) {
       
       #this is the projection code for your site, change it as needed.
       crs.proj <- base::paste0("+init=epsg:", epsg.code)
@@ -76,17 +76,17 @@ lad.array.to.raster.stack <- function(lad.array.list, epsg.code) {
     #a certain number of layers to the stack so that they all will have 100 layers. This will allow us to merge them together.
     new.layers.num <- 120 - nlayers(lad.rasters)
     
-    #to do this, we need to make a copy of one of the layers so that is have the save extent and resolution values
+    #to do this, we need to make a copy of one of the layers so that it has the same extent and resolution values
     new.raster <- lad.rasters[[1]]
     
     #lets assign all the cells in this raster as NA
     new.raster[] <- NA
     
     #now lets add the needed number of rasters to the top of the stack so that they will all eventually be equal
-    for (k in 1:new.layers.num) {
+    for (k in seq_along(1:new.layers.num)) {
       lad.rasters <- addLayer(lad.rasters, new.raster)
     }
-    
+
     #lets save the finished raster stack to the list
     lad.rstack.list[[z]] <- lad.rasters
     
@@ -94,8 +94,8 @@ lad.array.to.raster.stack <- function(lad.array.list, epsg.code) {
     print(paste0("Raster number ", z, " is complete!"))
   }
   
-  #now that all the raster stacks and complete lets merge them together as one big happy raster
-  lad.ras <- base::do.call(merge, lad.rstack.list)
+  #now that all the raster stacks are complete lets merge them together as one big happy raster
+  lad.ras <- base::do.call(raster::merge, lad.rstack.list) 
   
   #return the final raster
   return(lad.ras)
