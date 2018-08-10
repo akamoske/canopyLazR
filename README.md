@@ -81,6 +81,8 @@ lai.raster <- raster::calc(lad.raster, fun = sum, na.rm = TRUE)
 plot(lai.raster)
 ```
 
+![alt text](https://github.com/akamoske/LiDARforestR/blob/master/images/LAI_Raster_20180810.png "Example LAI Raster")
+
 ## License
 
 This project is licensed under the GNU GPUv2 License - see the [LICENSE.md](LICENSE.md) file for details
