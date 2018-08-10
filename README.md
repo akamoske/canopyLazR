@@ -57,18 +57,22 @@ to estimate LAD and LAI:
 
 ```
 # Convert .laz or .las files into a list of voxelized lidar arrays
-laz.data <- laz.to.array("./Data/laz_files", 10, 1)
+laz.data <- laz.to.array(laz.files.path = "./Data/laz_files", 
+                         voxel.resolution = 10, 
+                         z.resolution = 1)
 
 # Level each voxelized array in the list to mimic a canopy height model
-level.canopy <- canopy.height.levelr(laz.data)
+level.canopy <- canopy.height.levelr(lidar.array.list = laz.data)
 
 # Estimate LAD for each voxel in leveled array in the list 
-lad.estimates <- machorn.lad(level.canopy, 1, NULL)
+lad.estimates <- machorn.lad(leveld.lidar.array.list = level.canopy, 
+                             voxel.height = 1, 
+                             beer.lambert.constant = NULL)
 
 # Convert the list of LAD arrays into a single raster stack
 lad.raster <- lad.array.to.raster.stack(lad.array.list = lad.estimates, 
-laz.array.list = laz.data, 
-epsg.code = 32618)
+                                        laz.array.list = laz.data, 
+                                        epsg.code = 32618)
 
 # Create a single LAI raster from the LAD raster stack
 lai.raster <- raster::calc(lad.raster, fun = sum, na.rm = TRUE)
