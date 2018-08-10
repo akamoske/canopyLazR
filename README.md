@@ -22,10 +22,10 @@ akamoske@gmail.com
 
 Dr. Scott C. Stark
    
-~ [Michigan State University, Department of Forestry](https://www.canr.msu.edu/for/)      
-[Tropical Forestry Ecology Lab](https://sites.google.com/site/scottcstarktropicalforest/)   
+  [Michigan State University, Department of Forestry](https://www.canr.msu.edu/for/)      
+  [Tropical Forestry Ecology Lab](https://sites.google.com/site/scottcstarktropicalforest/)   
 
-scott.c.stark@gmail.com   
+  scott.c.stark@gmail.com   
 
 ## Installation
 
