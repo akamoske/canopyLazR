@@ -96,8 +96,18 @@ lad.array.to.raster.stack <- function(lad.array.list, laz.array.list, epsg.code)
     print(paste0("Raster number ", z, " is complete!"))
   }
 
-  #now that all the raster stacks are complete lets merge them together as one big happy raster
-  lad.ras <- base::do.call(raster::merge, lad.rstack.list)
+  #if there is more than 1 raster in the list lets do this
+  if(length(lad.rstack.list) > 1){
+
+    #now that all the raster stacks are complete lets merge them together as one big happy raster
+    lad.ras <- base::do.call(raster::merge, lad.rstack.list)
+
+  } else {
+
+    #set the only object in the list to this variable
+    lad.ras <- lad.rstack.list[[1]]
+
+  }
 
   #return the final raster
   return(lad.ras)
