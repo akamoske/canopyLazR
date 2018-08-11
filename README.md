@@ -19,18 +19,18 @@ Code written by: Aaron G. Kamoske, PhD Student
 
 ### Contributing Authors
 
-Scott C. Stark
+Dr. Scott C. Stark
    
   + [Michigan State University, Department of Forestry](https://www.canr.msu.edu/for/)      
   + [Tropical Forestry Ecology Lab](https://sites.google.com/site/scottcstarktropicalforest/)   
   + scott.c.stark@gmail.com  
   
-Shawn P. Serbin
+Dr. Shawn P. Serbin
 
   + [Brookhaven National Laboratory, Environmental and Climate Sciences Department](https://www.bnl.gov/envsci/bio/serbin-shawn.php)
   + sserbin@bnl.gov
   
-Kyla M. Dahlin
+Dr. Kyla M. Dahlin
   + [Michigan State University, Department of Geography, Environment, and Spatial Sciences](http://geo.msu.edu/)
   + [Michigan State University, Ecology, Evolutionary Biology, and Behavior Program](https://eebb.msu.edu/)
   + [ERSAM Lab](https://www.ersamlab.com/)
