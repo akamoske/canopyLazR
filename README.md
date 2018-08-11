@@ -13,7 +13,7 @@ The theory behind this R package is described in:
 
 Code written by: Aaron G. Kamoske, PhD Student
    
-  + [Michigan State University, Department of Geography](http://geo.msu.edu/)      
+  + [Michigan State University, Department of Geography, Environment, and Spatial Sciences](http://geo.msu.edu/)      
   + [ERSAM Lab](https://www.ersamlab.com/)   
   + akamoske@gmail.com
 
@@ -29,6 +29,12 @@ Shawn P. Serbin
 
   + [Brookhaven National Laboratory, Environmental and Climate Sciences Department](https://www.bnl.gov/envsci/bio/serbin-shawn.php)
   + sserbin@bnl.gov
+  
+Kyla M. Dahlin
+  + [Michigan State University, Department of Geography, Environment, and Spatial Sciences](http://geo.msu.edu/)
+  + [Michigan State University, Ecology, Evolutionary Biology, and Behavior Program](https://eebb.msu.edu/)
+  + [ERSAM Lab](https://www.ersamlab.com/)
+  + kdahlin@msu.edu
   
 ## Installation
 
@@ -50,6 +56,34 @@ library(LiDARforestR)
 
 Now all functions should be available.
 
+## Downloading example data
+
+[NEON](https://www.neonscience.org/) provides a teaching LiDAR dataset that is easy to download via R. We can use this file as a test dataset here. Code to download this .las file follows:
+
+```
+# Install missing R package if needed
+list.of.packages <- c("uuid","rlas","devtools")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[, "Package"])]
+if (length(new.packages)) {
+  print("installing : ")
+  print(new.packages)
+  install.packages(new.packages, repos = "http://cran.rstudio.com/", dependencies = TRUE)
+}
+
+# Create a scratch folder to contain example LiDAR dataset
+scratch_folder <- file.path("~/scratch/neon_data/")
+if (! file.exists(scratch_folder)) dir.create(scratch_folder,recursive=TRUE)
+setwd(file.path(scratch_folder))
+getwd()
+
+# Download NEON example .las file
+download.file(url = "https://ndownloader.figshare.com/files/7024955",
+              destfile = file.path(scratch_folder,"neon_lidar_example.las"),
+              method = "auto",
+              mode = "wb")
+
+```
+
 ## Example of usage (after installation)
 
 Once the package is loaded into your R session, this is the an example of how to use the functions in this package
@@ -57,7 +91,7 @@ to estimate LAD and LAI:
 
 ```
 # Convert .laz or .las files into a list of voxelized lidar arrays
-laz.data <- laz.to.array(laz.files.path = "./Data/laz_files", 
+laz.data <- laz.to.array(laz.files.path = "./", 
                          voxel.resolution = 10, 
                          z.resolution = 1)
 
@@ -72,7 +106,7 @@ lad.estimates <- machorn.lad(leveld.lidar.array.list = level.canopy,
 # Convert the list of LAD arrays into a single raster stack
 lad.raster <- lad.array.to.raster.stack(lad.array.list = lad.estimates, 
                                         laz.array.list = laz.data, 
-                                        epsg.code = 32618)
+                                        epsg.code = 32611)
 
 # Create a single LAI raster from the LAD raster stack
 lai.raster <- raster::calc(lad.raster, fun = sum, na.rm = TRUE)
