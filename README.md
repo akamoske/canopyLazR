@@ -11,7 +11,7 @@ The theory behind this R package is described in:
 
 ### Corresponding Author
 
-Code written by: Aaron G. Kamoske, PhD Student
+Aaron G. Kamoske, PhD Student
    
   + [Michigan State University, Department of Geography, Environment, and Spatial Sciences](http://geo.msu.edu/)      
   + [ERSAM Lab](https://www.ersamlab.com/)   
