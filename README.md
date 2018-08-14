@@ -38,7 +38,7 @@ Dr. Kyla M. Dahlin
   
 ## Installation
 
-The easiest way to install `LiDARforestR` is via `install_github` from the `devtools` package:
+The easiest way to install `canopyLazR` is via `install_github` from the `devtools` package:
 
 ```
 # If you haven't already installed this package and its dependencies
@@ -47,11 +47,11 @@ install.packages("devtools")
 # If you alread have devtools installed or just installed it
 library(devtools)
 
-# Install LiDARforestR from GitHub
-install_github("akamoske/LiDARforestR")
+# Install canopyLazR from GitHub
+install_github("akamoske/canopyLazR")
 
 # Load the library
-library(LiDARforestR)
+library(canopyLazR)
 ```
 
 Now all functions should be available.
