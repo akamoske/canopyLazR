@@ -1,4 +1,4 @@
-Package: LiDARforestR
+Package: canopyLazR
 Title: R library for estimating leaf area density (LAD) and leaf area index (LAI) from airborne LiDAR point clouds
 Version: 1.0
 Authors: Aaron G. Kamoske
