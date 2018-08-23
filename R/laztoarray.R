@@ -17,6 +17,9 @@ laz.to.array <- function(laz.files.path, voxel.resolution, z.resolution) {
   #list all the files in the path
   laz.files.list <- list.files(laz.files.path, pattern=c("\\.laz$|.las$"), full.names = TRUE)
 
+  #get rid of any files that are less than 100kb
+  laz.files.list <- laz.files.list[sapply(laz.files.list, file.size) > 100000]
+
   #loop through the files so that we can use memory management techniques
   for (i in 1:length(laz.files.list)) {
 
