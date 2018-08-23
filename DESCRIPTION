@@ -8,4 +8,4 @@ License: GPL-2 + file LICENSE
 Encoding: UTF-8
 LazyData: FALSE
 LazyLoad: yes
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0

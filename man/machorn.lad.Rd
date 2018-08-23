@@ -18,6 +18,6 @@ machorn.lad(leveld.lidar.array.list, voxel.height,
 A list of voxelized array which contain LAD estimates within each voxel
 }
 \description{
-This function reads in the lidar array created with the laz.to.array function and uses the MacArthur and Horn method to 
+This function reads in the lidar array created with the laz.to.array function and uses the MacArthur and Horn method to
 estimate LAD within each voxel. The sum of each column is equal to the LAI of that column of voxels.
 }
