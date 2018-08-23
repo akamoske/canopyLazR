@@ -30,7 +30,7 @@ laz.to.array <- function(laz.files.path, voxel.resolution, z.resolution) {
     laz.file <- laz.files.list[i]
 
     #read in laz files
-    laz.data <- rlas::readlasdata(laz.file)
+    laz.data <- rlas::read.las(laz.file)
 
     #convert into a x,y,z, class table for easy reading and analysis
     laz.xyz.table <- as.data.frame(cbind(x=laz.data$X, y=laz.data$Y,
