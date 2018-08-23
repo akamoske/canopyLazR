@@ -9,7 +9,7 @@ laz.to.array(laz.files.path, voxel.resolution, z.resolution)
 \arguments{
 \item{laz.files.path}{Path to the folder containing the .laz or .las files}
 
-\item{voxel.resolution}{The spatial resolution (x,y) you want the output voxel to be - this is a single 
+\item{voxel.resolution}{The spatial resolution (x,y) you want the output voxel to be - this is a single
 number where both sides of the cell will be the same}
 
 \item{z.resolution}{the vertical resolution of the voxel}

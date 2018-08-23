@@ -27,7 +27,8 @@ Dr. Scott C. Stark
   
 Dr. Shawn P. Serbin
 
-  + [Brookhaven National Laboratory, Environmental and Climate Sciences Department](https://www.bnl.gov/envsci/bio/serbin-shawn.php)
+  + [Brookhaven National Laboratory, Environmental and Climate Sciences Department](https://www.bnl.gov/envsci/)
+  + [Terrestrial Ecosystem Science and Technology (TEST) group](https://www.bnl.gov/testgroup)
   + sserbin@bnl.gov
   
 Dr. Kyla M. Dahlin
