@@ -76,7 +76,7 @@ lad.array.to.raster.stack <- function(lad.array.list, laz.array.list, epsg.code)
     #since all the raster stacks will have a different number of layers depending on pulse return locations, we need to normalize them.
     #the easiest way to do this was to assume that none of the tiles will have more than 100 layers in the raster stack. So we can just add
     #a certain number of layers to the stack so that they all will have 100 layers. This will allow us to merge them together.
-    new.layers.num <- 120 - nlayers(lad.rasters)
+    new.layers.num <- 200 - nlayers(lad.rasters)
 
     #to do this, we need to make a copy of one of the layers so that it has the same extent and resolution values
     new.raster <- lad.rasters[[1]]
