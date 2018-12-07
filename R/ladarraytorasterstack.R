@@ -108,6 +108,10 @@ lad.array.to.raster.stack <- function(lad.array.list, laz.array.list, epsg.code)
     lad.ras <- lad.rstack.list[[1]]
 
   }
+  
+  #lets remove the NA layer from the raster stack that was used to initialize the raster - this way the first layer will be 
+  #0-1 meters, the second 1-2 meters, etc.
+  lad.ras <- raster::dropLayer(lad.ras, 1)
 
   #return the final raster
   return(lad.ras)
