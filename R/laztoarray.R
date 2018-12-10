@@ -7,9 +7,10 @@
 #' @param voxel.resolution The spatial resolution (x,y) you want the output voxel to be - this is a single
 #' number where both sides of the cell will be the same
 #' @param z.resolution the vertical resolution of the voxel
+#' @param use.classified.returns TRUE or FALSE statement to determine if the user wants to use preclassified ground returns or the lowest point for "ground"
 #' @return A list of voxelized arrays
 #' @export
-laz.to.array <- function(laz.files.path, voxel.resolution, z.resolution) {
+laz.to.array <- function(laz.files.path, voxel.resolution, z.resolution, use.classified.returns) {
 
   #create an empty list
   laz.list <- list()
@@ -34,10 +35,21 @@ laz.to.array <- function(laz.files.path, voxel.resolution, z.resolution) {
 
     #convert into a x,y,z, class table for easy reading and analysis
     laz.xyz.table <- as.data.frame(cbind(x=laz.data$X, y=laz.data$Y,
-                                   z=laz.data$Z, class=laz.data$Classification))
+                                         z=laz.data$Z, class=laz.data$Classification))
 
-    #lets remove the points classified as noise
-    laz.xyz <- laz.xyz.table[laz.xyz.table$class != "7",]
+    #lets remove the points that are deemed outliers - this will remove the noise from the dataset. We can use John Tukey's method here for outlier removal
+    #where we can use 1.5 IQR since we are just working on preprocessing the data. More extreme data removal can happen later on and should be left up to
+    #the individual user
+
+    #lets get a summary of the stats for the z column (height)
+    stat.q <- summary(laz.xyz.table[,3])
+
+    #lets get the lower range for removal
+    t.lower <- stat.q[2] - 1.5*(stat.q[5] - stat.q[2])
+    t.upper <- stat.q[5] + 1.5*(stat.q[5] - stat.q[2])
+
+    #lets remove these outliers now
+    laz.xyz <- laz.xyz.table[(laz.xyz.table[,3] >= t.lower) & (laz.xyz.table[,3] <= t.upper),]
 
     #lets create some boundary information for the x,y,z columns
     x.range.raw <- range(laz.xyz[,1], na.rm=T)
@@ -110,7 +122,7 @@ laz.to.array <- function(laz.files.path, voxel.resolution, z.resolution) {
     #from the non-ground points, store the lowest ground value in the first row of the array, store the
     #highest non-ground point in the second row, and the number of lidar pulses in each z voxel being stored
     #in each subsequent row with the lowest voxel being the 3rd row and the highest voxel being the last row
-    lidar.array.populator <- function(x){
+    lidar.array.populator.classified <- function(x){
       ground.pts <- x[x[,4] == 2,]
       as.numeric(c(
         quantile(ground.pts[,3], prob = 0, na.rm = TRUE),
@@ -119,23 +131,63 @@ laz.to.array <- function(laz.files.path, voxel.resolution, z.resolution) {
       ))
     }
 
-    #lets see how many rows the empty array will have, this will be equal to the number of z voxels
-    #this will also test to make sure that there are no initial errors when applying the above function
-    #to the whole data set
-    z.vox.test <- length(dlply(lidar.table[1:2,], "x.y.index", lidar.array.populator)[[1]])
+    #lets make another function, but this one will not use the classified point cloud - instead it will take the lowest point in the
+    #column of voxels and assign that to the "ground" - this way the user can use their own classification scheme to determine what points represent
+    #the ground, rather than relying on a pre-determined classification
+    lidar.array.populator.lowest <- function(x){
+      ground.pts <- x[x[,4] == 2,]
+      as.numeric(c(
+        quantile(x[,3], prob = 0, na.rm = TRUE),
+        quantile(x[,3], prob = 1, na.rm = TRUE),
+        (table(c(x[,6], 1:length(z.bin) - 1)) - 1)
+      ))
+    }
 
-    #generate the final array using the lidar table, the x.y.index values as the factor, and the lidar.array.populator
-    #as the function.  set the dimensions equal to the number of z voxels, the length of y.bin and the length of x.bin.
-    #we need to subtract 1 from each of these values, because there is a 0 y.bin and x.bin, due to data creation
-    #and edge effect mitigation -- there is no data stored here, but makes counting and rounding easier
-    lidar.array <- array(as.vector(unlist(dlply(lidar.table, "x.y.index", lidar.array.populator, .progress = "text"))),
-                         dim = c(z.vox.test, (length(y.bin) - 1), (length(x.bin) - 1)))
+    #lets look at if the user wants to use the classified points or take the lowest point in each column - then we can construct our
+    #final LiDAR arrays
+    if (use.classified.returns == TRUE) {
 
-    #lets return the array and the x.bin and y.bin so that we can have spatial information for later
-    return.data <- base::list("array" = lidar.array, "x.bin" = x.bin, "y.bin" = y.bin, "z.bin" = z.bin)
+      print("Using classified LiDAR returns!")
+      #lets see how many rows the empty array will have, this will be equal to the number of z voxels
+      #this will also test to make sure that there are no initial errors when applying the above function
+      #to the whole data set
+      z.vox.test <- length(dlply(lidar.table[1:2,], "x.y.index", lidar.array.populator.classified)[[1]])
 
-    #save the data to the list
-    laz.list[[i]] <- return.data
+      #generate the final array using the lidar table, the x.y.index values as the factor, and the lidar.array.populator.classified
+      #as the function.  set the dimensions equal to the number of z voxels, the length of y.bin and the length of x.bin.
+      #we need to subtract 1 from each of these values, because there is a 0 y.bin and x.bin, due to data creation
+      #and edge effect mitigation -- there is no data stored here, but makes counting and rounding easier
+      lidar.array <- array(as.vector(unlist(dlply(lidar.table, "x.y.index", lidar.array.populator.classified, .progress = "text"))),
+                           dim = c(z.vox.test, (length(y.bin) - 1), (length(x.bin) - 1)))
+
+      #lets return the array and the x.bin and y.bin so that we can have spatial information for later
+      return.data <- base::list("array" = lidar.array, "x.bin" = x.bin, "y.bin" = y.bin, "z.bin" = z.bin)
+
+      #save the data to the list
+      laz.list[[i]] <- return.data
+    }
+
+    if (use.classified.returns == FALSE) {
+
+      print("Using unclassified LiDAR returns!")
+      #lets see how many rows the empty array will have, this will be equal to the number of z voxels
+      #this will also test to make sure that there are no initial errors when applying the above function
+      #to the whole data set
+      z.vox.test <- length(dlply(lidar.table[1:2,], "x.y.index", lidar.array.populator.lowest)[[1]])
+
+      #generate the final array using the lidar table, the x.y.index values as the factor, and the lidar.array.populator.classified
+      #as the function.  set the dimensions equal to the number of z voxels, the length of y.bin and the length of x.bin.
+      #we need to subtract 1 from each of these values, because there is a 0 y.bin and x.bin, due to data creation
+      #and edge effect mitigation -- there is no data stored here, but makes counting and rounding easier
+      lidar.array <- array(as.vector(unlist(dlply(lidar.table, "x.y.index", lidar.array.populator.lowest, .progress = "text"))),
+                           dim = c(z.vox.test, (length(y.bin) - 1), (length(x.bin) - 1)))
+
+      #lets return the array and the x.bin and y.bin so that we can have spatial information for later
+      return.data <- base::list("array" = lidar.array, "x.bin" = x.bin, "y.bin" = y.bin, "z.bin" = z.bin)
+
+      #save the data to the list
+      laz.list[[i]] <- return.data
+    }
 
     #lets remove all the stuff we don't need anymore so that R doesn't have a melt down due to memory usage
     gc()
