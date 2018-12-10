@@ -94,7 +94,8 @@ to estimate LAD and LAI:
 # Convert .laz or .las files into a list of voxelized lidar arrays
 laz.data <- laz.to.array(laz.files.path = "./", 
                          voxel.resolution = 10, 
-                         z.resolution = 1)
+                         z.resolution = 1,
+                         use.classified.returns = TRUE)
 
 # Level each voxelized array in the list to mimic a canopy height model
 level.canopy <- canopy.height.levelr(lidar.array.list = laz.data)
