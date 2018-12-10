@@ -4,7 +4,8 @@
 \alias{laz.to.array}
 \title{Convert a .laz or .las file to an array}
 \usage{
-laz.to.array(laz.files.path, voxel.resolution, z.resolution)
+laz.to.array(laz.files.path, voxel.resolution, z.resolution,
+  use.classified.returns)
 }
 \arguments{
 \item{laz.files.path}{Path to the folder containing the .laz or .las files}
@@ -13,6 +14,8 @@ laz.to.array(laz.files.path, voxel.resolution, z.resolution)
 number where both sides of the cell will be the same}
 
 \item{z.resolution}{the vertical resolution of the voxel}
+
+\item{use.classified.returns}{TRUE or FALSE statement to determine if the user wants to use preclassified ground returns or the lowest point for "ground"}
 }
 \value{
 A list of voxelized arrays
