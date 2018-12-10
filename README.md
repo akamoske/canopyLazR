@@ -115,6 +115,15 @@ lai.raster <- raster::calc(lad.raster, fun = sum, na.rm = TRUE)
 
 # Generate a quick raster plot of the resulting total canopy LAI values for each pixel
 plot(lai.raster)
+
+# Convert the list of LAZ arrays into a ground and canopy height raster
+grd.can.rasters <- array.to.ground.and.canopy.rasters(laz.data, 32611)
+
+# Plot the ground raster
+plot(grd.can.raster$ground.raster)
+
+#Plot the canopy height raster
+plot(grd.can.raster$canopy.raster)
 ```
 
 ## License
