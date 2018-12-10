@@ -11,7 +11,7 @@ For theory behind the package please see the citation below. Please cite with us
 
 ### Corresponding Author
 
-Aaron G. Kamoske, PhD Student
+Aaron G. Kamoske, PhD Candidate
    
   + [Michigan State University, Department of Geography, Environment, and Spatial Sciences](http://geo.msu.edu/)      
   + [ERSAM Lab](https://www.ersamlab.com/)   
