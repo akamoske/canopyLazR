@@ -137,7 +137,7 @@ For (i in 1:length(laz.files.list)) {
   plot(grd.can.rasters$canopy.raster)
   
   # Plot the canopy height model raster
-  (plot grd.can.rasters$chm.raster)
+  plot (grd.can.rasters$chm.raster)
   
   # All files will need to be saved before starting the next loop, write those to disc
 }
