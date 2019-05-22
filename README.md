@@ -101,12 +101,12 @@ laz.files.list <- laz.files.list[sapply(laz.files.list, file.size) > 5000]
 # For memory storage these is the best way to run the package
 #-----------------------------------------------------------------------------------
 
-For (i in laz.files.list) {
+For (i in 1:length(laz.files.list)) {
   # Convert .laz or .las file into a voxelized lidar array
-  laz.data <- laz.to.array(laz.file.path = i, 
-                         voxel.resolution = 10, 
-                         z.resolution = 1,
-                         use.classified.returns = TRUE)
+  laz.data <- laz.to.array(laz.file.path = laz.files.list[i], 
+                           voxel.resolution = 10, 
+                           z.resolution = 1,
+                           use.classified.returns = TRUE)
   
   # Level the voxelized array to mimic a canopy height model
   level.canopy <- canopy.height.levelr(lidar.array = laz.data)
@@ -131,13 +131,13 @@ For (i in laz.files.list) {
   grd.can.rasters <- array.to.ground.and.canopy.rasters(laz.data, 32611)
   
   # Plot the ground raster
-  plot(grd.can.raster$ground.raster)
+  plot(grd.can.rasters$ground.raster)
   
   # Plot the canopy height raster
-  plot(grd.can.raster$canopy.raster)
+  plot(grd.can.rasters$canopy.raster)
   
   # Plot the canopy height model raster
-  (plot grd.can.raster$chm.raster)
+  (plot grd.can.rasters$chm.raster)
   
   # All files will need to be saved before starting the next loop, write those to disc
 }
