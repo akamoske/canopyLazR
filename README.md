@@ -91,39 +91,58 @@ Once the package is loaded into your R session, this is the an example of how to
 to estimate LAD and LAI:
 
 ```
-# Convert .laz or .las files into a list of voxelized lidar arrays
-laz.data <- laz.to.array(laz.files.path = "./", 
+# List all the files in the path
+laz.files.list <- list.files("./", pattern=c("\\.laz$|.las$"), full.names = TRUE)
+
+# Remove any files that are less than 500kb - because these do not contain data
+laz.files.list <- laz.files.list[sapply(laz.files.list, file.size) > 5000]
+
+#-----------------------------------------------------------------------------------
+# For memory storage these is the best way to run the package
+#-----------------------------------------------------------------------------------
+
+For (i in laz.files.list) {
+  # Convert .laz or .las file into a voxelized lidar array
+  laz.data <- laz.to.array(laz.file.path = i, 
                          voxel.resolution = 10, 
                          z.resolution = 1,
                          use.classified.returns = TRUE)
-
-# Level each voxelized array in the list to mimic a canopy height model
-level.canopy <- canopy.height.levelr(lidar.array.list = laz.data)
-
-# Estimate LAD for each voxel in leveled array in the list 
-lad.estimates <- machorn.lad(leveld.lidar.array.list = level.canopy, 
+  
+  # Level the voxelized array to mimic a canopy height model
+  level.canopy <- canopy.height.levelr(lidar.array = laz.data)
+  
+  # Estimate LAD for each voxel in leveled array
+  lad.estimates <- machorn.lad(leveld.lidar.array = level.canopy, 
                              voxel.height = 1, 
                              beer.lambert.constant = NULL)
-
-# Convert the list of LAD arrays into a single raster stack
-lad.raster <- lad.array.to.raster.stack(lad.array.list = lad.estimates, 
-                                        laz.array.list = laz.data, 
+  
+  # Convert the LAD array into a single raster stack
+  lad.raster <- lad.array.to.raster.stack(lad.array = lad.estimates, 
+                                        laz.array = laz.data, 
                                         epsg.code = 32611)
+  
+  # Create a single LAI raster from the LAD raster stack
+  lai.raster <- raster::calc(lad.raster, fun = sum, na.rm = TRUE)
+  
+  # Generate a quick raster plot of the resulting total canopy LAI values for each pixel
+  plot(lai.raster)
+  
+  # Convert the list of LAZ arrays into a ground and canopy height raster
+  grd.can.rasters <- array.to.ground.and.canopy.rasters(laz.data, 32611)
+  
+  # Plot the ground raster
+  plot(grd.can.raster$ground.raster)
+  
+  # Plot the canopy height raster
+  plot(grd.can.raster$canopy.raster)
+  
+  # Plot the canopy height model raster
+  (plot grd.can.raster$chm.raster)
+  
+  # All files will need to be saved before starting the next loop, write those to disc
+}
 
-# Create a single LAI raster from the LAD raster stack
-lai.raster <- raster::calc(lad.raster, fun = sum, na.rm = TRUE)
 
-# Generate a quick raster plot of the resulting total canopy LAI values for each pixel
-plot(lai.raster)
-
-# Convert the list of LAZ arrays into a ground and canopy height raster
-grd.can.rasters <- array.to.ground.and.canopy.rasters(laz.data, 32611)
-
-# Plot the ground raster
-plot(grd.can.raster$ground.raster)
-
-#Plot the canopy height raster
-plot(grd.can.raster$canopy.raster)
 ```
 
 ## License
