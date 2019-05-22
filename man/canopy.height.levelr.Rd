@@ -4,10 +4,10 @@
 \alias{canopy.height.levelr}
 \title{Level a voxelized array to the ground, mimicing a canopy height model}
 \usage{
-canopy.height.levelr(lidar.array.list)
+canopy.height.levelr(lidar.array)
 }
 \arguments{
-\item{lidar.array.list}{List of voxelized arrays that was created with the las.to.array function}
+\item{lidar.array}{Voxelized array that was created with the laz.to.array function}
 }
 \value{
 A list of leveled voxelized arrays

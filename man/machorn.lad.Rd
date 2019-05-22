@@ -4,11 +4,11 @@
 \alias{machorn.lad}
 \title{Convert a lidar array into an array of LAD estimates}
 \usage{
-machorn.lad(leveld.lidar.array.list, voxel.height,
+machorn.lad(leveld.lidar.array, voxel.height,
   beer.lambert.constant = NULL)
 }
 \arguments{
-\item{leveld.lidar.array.list}{List of leveled lidar arrays, which is the output of the canopy.height.levelr function}
+\item{leveld.lidar.array}{Leveled lidar array, which is the output of the canopy.height.levelr function}
 
 \item{voxel.height}{The Z parameter that was entered into the laz.to.array function}
 

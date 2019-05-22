@@ -4,11 +4,11 @@
 \alias{laz.to.array}
 \title{Convert a .laz or .las file to an array}
 \usage{
-laz.to.array(laz.files.path, voxel.resolution, z.resolution,
+laz.to.array(laz.file.path, voxel.resolution, z.resolution,
   use.classified.returns)
 }
 \arguments{
-\item{laz.files.path}{Path to the folder containing the .laz or .las files}
+\item{laz.file.path}{Path to the .laz or .las file}
 
 \item{voxel.resolution}{The spatial resolution (x,y) you want the output voxel to be - this is a single
 number where both sides of the cell will be the same}

@@ -4,12 +4,12 @@
 \alias{lad.array.to.raster.stack}
 \title{Convert a list of voxelized arrays into a single raster stack}
 \usage{
-lad.array.to.raster.stack(lad.array.list, laz.array.list, epsg.code)
+lad.array.to.raster.stack(lad.array, laz.array, epsg.code)
 }
 \arguments{
-\item{lad.array.list}{List of voxelized LAD arrays that was created with the machorn.lad function}
+\item{lad.array}{Voxelized LAD array that was created with the machorn.lad function}
 
-\item{laz.array.list}{Original list of LiDAR pulse count arrays that was generated using the laz.to.array function. This contains
+\item{laz.array}{Original LiDAR pulse count array that was generated using the laz.to.array function. This contains
 spatial information for the array.}
 
 \item{epsg.code}{EPSG code so that the rasters can be projected into the appropriate projection}
