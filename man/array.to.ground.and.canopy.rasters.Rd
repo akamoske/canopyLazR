@@ -4,10 +4,10 @@
 \alias{array.to.ground.and.canopy.rasters}
 \title{Convert a list of voxelized arrays into two rasters - ground and canopy height}
 \usage{
-array.to.ground.and.canopy.rasters(laz.array.list, epsg.code)
+array.to.ground.and.canopy.rasters(laz.array, epsg.code)
 }
 \arguments{
-\item{laz.array.list}{Original list of LiDAR pulse count arrays that was generated using the laz.to.array function. This contains
+\item{laz.array}{Original LiDAR pulse count array that was generated using the laz.to.array function. This contains
 spatial information for the array.}
 
 \item{epsg.code}{EPSG code so that the rasters can be projected into the appropriate projection}
