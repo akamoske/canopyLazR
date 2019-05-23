@@ -94,6 +94,19 @@ machorn.lad <- function(leveld.lidar.array, voxel.height, beer.lambert.constant 
     rLAD[is.infinite(rLAD) | is.nan(rLAD)] <- NA
   }
 
+  #lets replace the zero's that we had to add into the array to make the previous code work into NA values
+  #so that we can more easily calculate attributes in later steps
+  for (r in 1:dim(rLAD)[2]) {
+    for (c in 1:dim(rLAD)[3]) {
+
+      #we need to add 2 to this because the value in the first slot is NA to initiate the array and we want to be
+      #in the next voxel above the one with the last value, thus we need to add 2
+      na.cut <- ceiling(leveld.lidar.array$array[2,r,c]) + 2
+
+      rLAD[na.cut:dim(rLAD)[1],r,c] <- NA
+    }
+  }
+
   #lets make a list to store the data we need to complete the process later on
   out <- list();
   out$rLAD <- rLAD
