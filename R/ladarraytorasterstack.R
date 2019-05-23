@@ -67,21 +67,28 @@ lad.array.to.raster.stack <- function(lad.array, laz.array, epsg.code) {
   #now that we have all the rasters for one tile, lets stack those all together
   lad.rasters <- do.call(raster::stack, raw.lad.rasters)
 
-  #since all the raster stacks will have a different number of layers depending on pulse return locations, we need to normalize them.
-  #the easiest way to do this was to assume that none of the tiles will have more than 100 layers in the raster stack. So we can just add
-  #a certain number of layers to the stack so that they all will have 100 layers. This will allow us to merge them together.
-  new.layers.num <- 250 - nlayers(lad.rasters)
+  #----------------------------------------------------------------------------------------------------------------
+  # Since this function was changed to work on a single file this section is removed, but will be left here
+  # for completness and future usage
+  #----------------------------------------------------------------------------------------------------------------
 
-  #to do this, we need to make a copy of one of the layers so that it has the same extent and resolution values
-  new.raster <- lad.rasters[[1]]
+  # #since all the raster stacks will have a different number of layers depending on pulse return locations, we need to normalize them.
+  # #the easiest way to do this was to assume that none of the tiles will have more than 100 layers in the raster stack. So we can just add
+  # #a certain number of layers to the stack so that they all will have 100 layers. This will allow us to merge them together.
+  # new.layers.num <- 250 - nlayers(lad.rasters)
+  #
+  # #to do this, we need to make a copy of one of the layers so that it has the same extent and resolution values
+  # new.raster <- lad.rasters[[1]]
+  #
+  # #lets assign all the cells in this raster as NA
+  # new.raster[] <- NA
+  #
+  # #now lets add the needed number of rasters to the top of the stack so that they will all eventually be equal
+  # for (k in seq_along(1:new.layers.num)) {
+  #   lad.rasters <- addLayer(lad.rasters, new.raster)
+  # }
 
-  #lets assign all the cells in this raster as NA
-  new.raster[] <- NA
-
-  #now lets add the needed number of rasters to the top of the stack so that they will all eventually be equal
-  for (k in seq_along(1:new.layers.num)) {
-    lad.rasters <- addLayer(lad.rasters, new.raster)
-  }
+  #----------------------------------------------------------------------------------------------------------------
 
   #lets remove the NA layer from the raster stack that was used to initialize the raster - this way the first layer will be
   #0-1 meters, the second 1-2 meters, etc.
