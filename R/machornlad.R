@@ -103,7 +103,14 @@ machorn.lad <- function(leveld.lidar.array, voxel.height, beer.lambert.constant 
       #in the next voxel above the one with the last value, thus we need to add 2
       na.cut <- ceiling(leveld.lidar.array$array[2,r,c]) + 2
 
-      rLAD[na.cut:dim(rLAD)[1],r,c] <- NA
+      #we need to add a failsafe if na.cut returns a NA value
+      if (is.na(na.cut) == FALSE) {
+
+        rLAD[na.cut:dim(rLAD)[1],r,c] <- NA
+
+      } else {
+
+      }
     }
   }
 
