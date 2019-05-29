@@ -236,19 +236,19 @@ canopy.volume <- function(lad.array, laz.array, ht.cut, xy.res, z.res, epsg.code
       
       moving.window <- list(
         #top row of moving window
-        nw <- filled.canopy.euphotic.mat[(r+1), (c-1)],
-        nn <- filled.canopy.euphotic.mat[(r+1), (c+0)],
-        ne <- filled.canopy.euphotic.mat[(r+1), (c+1)],
+        nw <- euphotic.volume.mat[(r+1), (c-1)],
+        nn <- euphotic.volume.mat[(r+1), (c+0)],
+        ne <- euphotic.volume.mat[(r+1), (c+1)],
         
         #middle row of moving window
-        cw <- filled.canopy.euphotic.mat[(r+0), (c-1)],
-        cc <- filled.canopy.euphotic.mat[(r+0), (c+0)],
-        ce <- filled.canopy.euphotic.mat[(r+0), (c+1)],
+        cw <- euphotic.volume.mat[(r+0), (c-1)],
+        cc <- euphotic.volume.mat[(r+0), (c+0)],
+        ce <- euphotic.volume.mat[(r+0), (c+1)],
         
         #bottom row of moving window
-        sw <- filled.canopy.euphotic.mat[(r-1), (c-1)],
-        ss <- filled.canopy.euphotic.mat[(r-1), (c+0)],
-        se <- filled.canopy.euphotic.mat[(r-1), (c+1)]
+        sw <- euphotic.volume.mat[(r-1), (c-1)],
+        ss <- euphotic.volume.mat[(r-1), (c+0)],
+        se <- euphotic.volume.mat[(r-1), (c+1)]
       )
       
       #lets calculate canopy rugosity
@@ -271,19 +271,19 @@ canopy.volume <- function(lad.array, laz.array, ht.cut, xy.res, z.res, epsg.code
       
       moving.window <- list(
         #top row of moving window
-        nw <- filled.canopy.oligophotic.mat[(r+1), (c-1)],
-        nn <- filled.canopy.oligophotic.mat[(r+1), (c+0)],
-        ne <- filled.canopy.oligophotic.mat[(r+1), (c+1)],
+        nw <- oligophotic.volume.mat[(r+1), (c-1)],
+        nn <- oligophotic.volume.mat[(r+1), (c+0)],
+        ne <- oligophotic.volume.mat[(r+1), (c+1)],
         
         #middle row of moving window
-        cw <- filled.canopy.oligophotic.mat[(r+0), (c-1)],
-        cc <- filled.canopy.oligophotic.mat[(r+0), (c+0)],
-        ce <- filled.canopy.oligophotic.mat[(r+0), (c+1)],
+        cw <- oligophotic.volume.mat[(r+0), (c-1)],
+        cc <- oligophotic.volume.mat[(r+0), (c+0)],
+        ce <- oligophotic.volume.mat[(r+0), (c+1)],
         
         #bottom row of moving window
-        sw <- filled.canopy.oligophotic.mat[(r-1), (c-1)],
-        ss <- filled.canopy.oligophotic.mat[(r-1), (c+0)],
-        se <- filled.canopy.oligophotic.mat[(r-1), (c+1)]
+        sw <- oligophotic.volume.mat[(r-1), (c-1)],
+        ss <- oligophotic.volume.mat[(r-1), (c+0)],
+        se <- oligophotic.volume.mat[(r-1), (c+1)]
       )
       
       #lets calculate canopy rugosity
