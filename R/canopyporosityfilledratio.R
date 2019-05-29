@@ -59,7 +59,7 @@ canopy.porosity.filled.ratio <- function(lad.array, laz.array, ht.cut, epsg.code
                                   ymx = laz.array$y.bin[length(laz.array$y.bin)],
                                   crs = crs.proj)
   
-  empty.raster <- raster::raster(filled.mat,
+  empty.raster <- raster::raster(porosity.mat,
                                  xmn = laz.array$x.bin[1],
                                  xmx = laz.array$x.bin[length(laz.array$x.bin)],
                                  ymn = laz.array$y.bin[1],
@@ -70,10 +70,10 @@ canopy.porosity.filled.ratio <- function(lad.array, laz.array, ht.cut, epsg.code
   #this is standard when converting from an array to a raster
   filled.raster.flip <- flip(filled.raster, direction = "y")
   
-  empty.raster.flip <- flip(empty.raster, direction = "y")
+  porosity.raster.flip <- flip(empty.raster, direction = "y")
   
   #return the final rasters
   final.data <- list("filled.raster" = filled.raster.flip, 
-                     "empty.raster" = empty.raster.flip)
+                     "porosity.raster" = porosity.raster.flip)
   return(final.data)
 }
