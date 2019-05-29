@@ -101,18 +101,6 @@ canopy.volume <- function(lad.array, laz.array, ht.cut, xy.res, z.res, epsg.code
           
           #can get canopy depth by dividing by xy.res squared
           euphotic.volume <- foliage.depth.65 * xy.res * xy.res * z.res
-          euphotic.tla <- round(canopy.filled.voxels[foliage.depth.65], digits = 4)
-          
-          oligophotic.volume <- (length(canopy.filled.voxels) - foliage.depth.65) * xy.res * xy.res * z.res
-          oligophotic.tla <- round(foliage.sum - euphotic.tla, digits = 4)
-          
-          euphotic.volume.mat[r,c] <- euphotic.volume
-          euphotic.tla.mat[r,c] <- euphotic.tla
-          oligophotic.volume.mat[r,c] <- oligophotic.volume
-          oligophotic.tla.mat[r,c] <- oligophotic.tla
-          
-          #can get canopy depth by dividing by xy.res squared
-          euphotic.volume <- foliage.depth.65 * xy.res * xy.res * z.res
           euphotic.tla <- foliage.65
           
           oligophotic.volume <- (length(canopy.column.no.na) - foliage.depth.65) * xy.res * xy.res * z.res
