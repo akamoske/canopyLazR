@@ -24,8 +24,6 @@
 #' @param ht.cut Height that calculations will exclude. This is to remove understory LAD estimates from
 #' further calculations. If 5 is entered then all voxels 5 meters and above will be included. Enter 0 if
 #' you want to include all calculations
-#' @param xy.res Resolution of xy coordinates - if it is a 10x10 meter pixel then enter 10 here
-#' @param z.res Vertical resolution of voxel - if it is 1 meter tall then enter 1
 #' @param epsg.code EPSG code so that the rasters can be projected into the appropriate projection
 #' @return A list containing max LAD and height of max LAD rasters.
 #' @export

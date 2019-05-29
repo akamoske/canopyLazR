@@ -17,10 +17,6 @@ further calculations. If 5 is entered then all voxels 5 meters and above will be
 you want to include all calculations}
 
 \item{epsg.code}{EPSG code so that the rasters can be projected into the appropriate projection}
-
-\item{xy.res}{Resolution of xy coordinates - if it is a 10x10 meter pixel then enter 10 here}
-
-\item{z.res}{Vertical resolution of voxel - if it is 1 meter tall then enter 1}
 }
 \value{
 A list containing max LAD and height of max LAD rasters.
