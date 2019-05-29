@@ -34,7 +34,7 @@ portion of the canopy and then does the same for the remaining canopy. It then r
 }
 \details{
 This function also uses a 3x3 moving window to calculate the volume of the euphotic, oligophotic, and empty
-zones within the moving window. This returns 3 additional rasters, one for each variable.
+zones within the moving window. This returns 5 additional rasters, one for each variable.
 
 These forest structure attributes are based off calculations from:
 
