@@ -298,7 +298,7 @@ canopy.volume <- function(lad.array, laz.array, ht.cut, xy.res, z.res, epsg.code
   crs.proj <- base::paste0("+init=epsg:", epsg.code)
   
   #now we can create a raster for each level of the canopy using the original x,y data from the laz data
-  empty.canopy.volume.raster <- raster::raster(empty.volume.mat,
+  empty.canopy.volume.raster <- raster::raster(empty.canopy.volume.mat,
                                                xmn = laz.data$x.bin[1],
                                                xmx = laz.data$x.bin[length(laz.data$x.bin)],
                                                ymn = laz.data$y.bin[1],
