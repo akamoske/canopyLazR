@@ -94,7 +94,7 @@ within.canopy.rugosity <- function(lad.array, laz.array, ht.cut, epsg.code) {
                                   ymx = laz.array$y.bin[length(laz.array$y.bin)],
                                   crs = crs.proj)
   
-  rugosity.raster <- raster::raster(sd.lad.col.mat,
+  rugosity.raster <- raster::raster(rugosity.mat,
                                     xmn = laz.array$x.bin[1],
                                     xmx = laz.array$x.bin[length(laz.array$x.bin)],
                                     ymn = laz.array$y.bin[1],
