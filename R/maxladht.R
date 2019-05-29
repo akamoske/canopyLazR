@@ -11,7 +11,7 @@
 #' Forests, 4, 537-552. https://doi.org/10.3390/f4030537
 #'
 #' @param lad.array LAD estimate array that was generated using the machorn.lad function. 
-#' @param laz.arraay Voxelized LiDAR array that was generated using the laz.to.array function. This contains
+#' @param laz.array Voxelized LiDAR array that was generated using the laz.to.array function. This contains
 #' spatial information for all arrays.
 #' @param ht.cut Height that calculations will exclude. This is to remove understory LAD estimates from
 #' further calculations. If 5 is entered then all voxels 5 meters and above will be included. Enter 0 if
