@@ -7,7 +7,7 @@
 #' portion of the canopy and then does the same for the remaining canopy. It then returns 5 rasters
 #' 
 #' This function also uses a 3x3 moving window to calculate the volume of the euphotic, oligophotic, and empty
-#' zones within the moving window. This returns 3 additional rasters, one for each variable.
+#' zones within the moving window. This returns 5 additional rasters, one for each variable.
 #' 
 #' These forest structure attributes are based off calculations from: 
 #' 
@@ -111,8 +111,6 @@ canopy.volume <- function(lad.array, laz.array, ht.cut, xy.res, z.res, epsg.code
           oligophotic.volume.mat[r,c] <- oligophotic.volume
           oligophotic.tla.mat[r,c] <- oligophotic.tla
           
-          
-          
           #can get canopy depth by dividing by xy.res squared
           euphotic.volume <- foliage.depth.65 * xy.res * xy.res * z.res
           euphotic.tla <- foliage.65
@@ -188,6 +186,8 @@ canopy.volume <- function(lad.array, laz.array, ht.cut, xy.res, z.res, epsg.code
   empty.canopy.volume.mat <- matrix(data = NA, nrow = dim(lad.array$rLAD)[2], ncol = dim(lad.array$rLAD)[3])
   filled.canopy.euphotic.mat <- matrix(data = NA, nrow = dim(lad.array$rLAD)[2], ncol = dim(lad.array$rLAD)[3])
   filled.canopy.oligophotic.mat <- matrix(data = NA, nrow = dim(lad.array$rLAD)[2], ncol = dim(lad.array$rLAD)[3])
+  filled.canopy.oligophotic.tla.mat <- matrix(data = NA, nrow = dim(lad.array$rLAD)[2], ncol = dim(lad.array$rLAD)[3])
+  filled.canopy.euphotic.tla.mat <- matrix(data = NA, nrow = dim(lad.array$rLAD)[2], ncol = dim(lad.array$rLAD)[3])
 
   #EMPTY CANOPY VOLUME
   
@@ -294,6 +294,76 @@ canopy.volume <- function(lad.array, laz.array, ht.cut, xy.res, z.res, epsg.code
     }
   }
   
+  # FILLED CANOPY EUPHOTIC TLA
+  
+  #since this is a moving window we cannot include the outside edges
+  row.ind <- 2:(nrow(filled.canopy.euphotic.tla.mat) - 1)
+  col.ind <- 2:(ncol(filled.canopy.euphotic.tla.mat) - 1)
+  
+  #loop through these values 
+  for (r in row.ind) {
+    for (c in col.ind) {
+      
+      moving.window <- list(
+        #top row of moving window
+        nw <- euphotic.tla.mat[(r+1), (c-1)],
+        nn <- euphotic.tla.mat[(r+1), (c+0)],
+        ne <- euphotic.tla.mat[(r+1), (c+1)],
+        
+        #middle row of moving window
+        cw <- euphotic.tla.mat[(r+0), (c-1)],
+        cc <- euphotic.tla.mat[(r+0), (c+0)],
+        ce <- euphotic.tla.mat[(r+0), (c+1)],
+        
+        #bottom row of moving window
+        sw <- euphotic.tla.mat[(r-1), (c-1)],
+        ss <- euphotic.tla.mat[(r-1), (c+0)],
+        se <- euphotic.tla.mat[(r-1), (c+1)]
+      )
+      
+      #lets calculate canopy rugosity
+      euphotic.tla.canopy <- sum(unlist(moving.window), na.rm = TRUE)
+      
+      #add this value to the new matrix
+      filled.canopy.euphotic.tla.mat[r,c] <- euphotic.tla.canopy
+    }
+  }
+  
+  # FILLED CANOPY OLIGOPHOTIC TLA
+  
+  #since this is a moving window we cannot include the outside edges
+  row.ind <- 2:(nrow(filled.canopy.oligophotic.tla.mat) - 1)
+  col.ind <- 2:(ncol(filled.canopy.oligophotic.tla.mat) - 1)
+  
+  #loop through these values 
+  for (r in row.ind) {
+    for (c in col.ind) {
+      
+      moving.window <- list(
+        #top row of moving window
+        nw <- oligophotic.tla.mat[(r+1), (c-1)],
+        nn <- oligophotic.tla.mat[(r+1), (c+0)],
+        ne <- oligophotic.tla.mat[(r+1), (c+1)],
+        
+        #middle row of moving window
+        cw <- oligophotic.tla.mat[(r+0), (c-1)],
+        cc <- oligophotic.tla.mat[(r+0), (c+0)],
+        ce <- oligophotic.tla.mat[(r+0), (c+1)],
+        
+        #bottom row of moving window
+        sw <- oligophotic.tla.mat[(r-1), (c-1)],
+        ss <- oligophotic.tla.mat[(r-1), (c+0)],
+        se <- oligophotic.tla.mat[(r-1), (c+1)]
+      )
+      
+      #lets calculate canopy rugosity
+      oligophotic.tla.canopy <- sum(unlist(moving.window), na.rm = TRUE)
+      
+      #add this value to the new matrix
+      filled.canopy.oligophotic.tla.mat[r,c] <- oligophotic.tla.canopy
+    }
+  }
+  
   #this is the projection code for your site, change it as needed.
   crs.proj <- base::paste0("+init=epsg:", epsg.code)
   
@@ -319,11 +389,28 @@ canopy.volume <- function(lad.array, laz.array, ht.cut, xy.res, z.res, epsg.code
                                                      ymx = laz.data$y.bin[length(laz.data$y.bin)],
                                                      crs = crs.proj)
   
+  filled.canopy.oligophotic.tla.raster <- raster::raster(filled.canopy.oligophotic.tla.mat,
+                                                         xmn = laz.data$x.bin[1],
+                                                         xmx = laz.data$x.bin[length(laz.data$x.bin)],
+                                                         ymn = laz.data$y.bin[1],
+                                                         ymx = laz.data$y.bin[length(laz.data$y.bin)],
+                                                         crs = crs.proj)
+  
+  filled.canopy.euphotic.tla.raster <- raster::raster(filled.canopy.euphotic.tla.mat,
+                                                         xmn = laz.data$x.bin[1],
+                                                         xmx = laz.data$x.bin[length(laz.data$x.bin)],
+                                                         ymn = laz.data$y.bin[1],
+                                                         ymx = laz.data$y.bin[length(laz.data$y.bin)],
+                                                         crs = crs.proj)
+  
+  
   #we have to flip these rasters so that they are orientated the correct direction
   #this is standard when converting from an array to a raster
   empty.canopy.volume.raster.flip <- flip(empty.canopy.volume.raster, direction = "y")
   filled.canopy.euphotic.raster.flip <- flip(filled.canopy.euphotic.raster, direction = "y")
   filled.canopy.oligophotic.raster.flip <- flip(filled.canopy.oligophotic.raster, direction = "y")
+  filled.canopy.oligophotic.tla.raster.flip <- flip(filled.canopy.oligophotic.tla.raster, direction = "y")
+  filled.canopy.euphotic.tla.raster.flip <- flip(filled.canopy.euphotic.tla.raster, direction = "y")
   
   #return the final rasters
   final.data <- list("euphotic.volume.column.raster" = euphotic.volume.raster.flip, 
@@ -333,7 +420,10 @@ canopy.volume <- function(lad.array, laz.array, ht.cut, xy.res, z.res, epsg.code
                      "empty.volume.column.raster" = empty.volume.raster.flip,
                      "empty.canopy.volume.raster" = empty.canopy.volume.raster.flip,
                      "filled.canopy.euphotic.raster" = filled.canopy.euphotic.raster.flip,
-                     "filled.canopy.oligophotic.raster" = filled.canopy.oligophotic.raster.flip)
+                     "filled.canopy.oligophotic.raster" = filled.canopy.oligophotic.raster.flip,
+                     "filled.canopy.oligophotic.tla.raster" = filled.canopy.oligophotic.tla.raster.flip,
+                     "filled.canopy.euphotic.tla.raster" = filled.canopy.euphotic.tla.raster.flip)
+  
   return(final.data)
   
 }
