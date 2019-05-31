@@ -106,7 +106,13 @@ machorn.lad <- function(leveld.lidar.array, voxel.height, beer.lambert.constant 
       #we need to add a failsafe if na.cut returns a NA value
       if (is.na(na.cut) == FALSE) {
 
-        rLAD[na.cut:dim(rLAD)[1],r,c] <- NA
+        if (na.cut > dim(rLAD)[1]) {
+
+        } else {
+
+          rLAD[na.cut:dim(rLAD)[1],r,c] <- NA
+
+        }
 
       } else {
 
