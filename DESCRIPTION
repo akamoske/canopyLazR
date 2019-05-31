@@ -1,6 +1,6 @@
 Package: canopyLazR
 Title: R library for estimating leaf area density (LAD) and leaf area index (LAI) from airborne LiDAR point clouds
-Version: 1.0
+Version: 2.0
 Authors: Aaron G. Kamoske
 Description: This package use the MacArthur and Horn method to estimate LAD and LAI from airborn LiDAR point clouds. Detailed information about this code and its purpose can be found in Kamoske et al. 2018.
 Depends: fields, plyr, rlas, raster
