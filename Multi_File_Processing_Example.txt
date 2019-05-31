@@ -1,0 +1,345 @@
+##########################################################################################
+# This code will process NEON LiDAR data into a host of different RData and Raster files
+
+# Code written by Aaron Kamoske - kamoskea@msu.edu - Summer 2019
+
+# This is an example of how to process a large list of LiDAR tiles from NEON
+##########################################################################################
+
+#-----------------------------------------------------------------------------------------
+# First some basics
+#-----------------------------------------------------------------------------------------
+
+#set the file path
+laz.files <- "D://NEON_Data/2018/D07/2018_MLBS_3/L1/DiscreteLidar/ClassifiedPointCloud/"
+
+#list all the files in the path
+laz.files.list <- list.files(laz.files, pattern=c("\\.laz$|.las$"), full.names = TRUE)
+
+#get rid of any files that are less than 500kb
+laz.files.list <- laz.files.list[sapply(laz.files.list, file.size) > 5000]
+
+#let's load the LiDAR library
+library(canopyLazR)
+
+#-----------------------------------------------------------------------------------------
+# Let's run each LiDAR tile one by one
+#-----------------------------------------------------------------------------------------
+
+for (i in 1:length(laz.files.list)) {
+  
+  print(i)
+  print(paste0("Processing: ", laz.files.list[i]))
+  
+  # Convert .laz or .las file into a voxelized lidar array
+  laz.data <- laz.to.array(laz.file.path = laz.files.list[i], 
+                           voxel.resolution = 10, 
+                           z.resolution = 1,
+                           use.classified.returns = TRUE)
+  
+  # Level the voxelized array to mimic a canopy height model
+  level.canopy <- canopy.height.levelr(lidar.array = laz.data)
+  
+  # Estimate LAD for each voxel in leveled array
+  lad.estimates <- machorn.lad(leveld.lidar.array = level.canopy, 
+                               voxel.height = 1, 
+                               beer.lambert.constant = 0.8776)
+  
+  # Convert the LAD array into a single raster stack
+  lad.raster <- lad.array.to.raster.stack(lad.array = lad.estimates, 
+                                          laz.array = laz.data, 
+                                          epsg.code = 32617)
+  
+  # We should remove the bottom 5 meters of LAD data to match everything else before calculating LAI
+  lad.raster.5 <- subset(lad.raster, 5:nlayers(lad.raster))
+  
+  # Create a single LAI raster from the LAD raster stack
+  lai.raster <- raster::calc(lad.raster.5, fun = sum, na.rm = TRUE)
+  
+  # Convert the list of LAZ arrays into a ground and canopy height raster
+  grd.can.rasters <- array.to.ground.and.canopy.rasters(laz.array = laz.data, 
+                                                        epsg.code = 32617)
+  
+  # Calculate max LAD and height of max LAD
+  max.lad <- lad.ht.max(lad.array = lad.estimates, 
+                        laz.array = laz.data, 
+                        ht.cut = 5, 
+                        epsg.code = 32617)
+  
+  # Calculate the ratio of filled and empty voxels in a given column of the canopy
+  empty.filled.ratio <- canopy.porosity.filled.ratio(lad.array = lad.estimates,
+                                                     laz.array = laz.data,
+                                                     ht.cut = 5,
+                                                     epsg.code = 32617)
+  
+  # Calculate the volume of filled and empty voxles in a given column of the canopy
+  empty.filled.volume <- canopy.porosity.filled.volume(lad.array = lad.estimates,
+                                                       laz.array = laz.data,
+                                                       ht.cut = 5,
+                                                       xy.res = 10,
+                                                       z.res = 1,
+                                                       epsg.code = 32617)
+  
+  # Calculate the within canopy rugosity
+  within.can.rugosity <- rugosity.within.canopy(lad.array = lad.estimates,
+                                                laz.array = laz.data,
+                                                ht.cut = 5,
+                                                epsg.code = 32617)
+  
+  # Calculate the heights of various LAD quantiles
+  ht.quantiles <- lad.quantiles(lad.array = lad.estimates,
+                                laz.array = laz.data,
+                                ht.cut = 5,
+                                epsg.code = 32617)
+  
+  # Calculate various canopy volume metrics from Lefsky
+  can.volume <- canopy.volume(lad.array = lad.estimates,
+                              laz.array = laz.data,
+                              ht.cut = 5,
+                              xy.res = 10,
+                              z.res = 1,
+                              epsg.code = 32617)
+  
+  # We can calculate the depth of the euphotic zone by dividing by the volume of the voxel
+  euphotic.depth <- can.volume$euphotic.volume.column.raster / ( 10 * 10 * 1)
+  
+  #-----------------------------------------------------------------------------------------
+  # Lets write all the needed files to disc 
+  #-----------------------------------------------------------------------------------------
+  
+  #some file output name prep
+  file.name <- laz.files.list[i]
+  tile.numb <- strsplit(file.name, "_")[[1]][8:9]
+  
+  #laz array
+  save(laz.data, file = paste0("D://Processed_Data/MLBS/2018/LiDAR/Rdata_Files/MLBS_",
+                               tile.numb[1], "_", tile.numb[2], "_laz_array.RData"))
+  
+  #lad raster stack
+  writeRaster(lad.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/lad/MLBS_",
+                                             tile.numb[1], "_", tile.numb[2] , "_lad.tif"), 
+              format = "GTiff")
+  
+  #lai raster
+  writeRaster(lai.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/lai/MLBS_",
+                                            tile.numb[1], "_", tile.numb[2], "_lai.tif"), 
+              format = "GTiff")
+  
+  #ground raster
+  writeRaster(grd.can.rasters$ground.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/dtm/MLBS_",
+                                                               tile.numb[1], "_", tile.numb[2], "_dtm.tif"), 
+              format = "GTiff")
+  
+  #canopy raster
+  writeRaster(grd.can.rasters$canopy.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/dsm/MLBS_",
+                                                               tile.numb[1], "_", tile.numb[2], "_dsm.tif"), 
+              format = "GTiff")
+  
+  #chm raster
+  writeRaster(grd.can.rasters$chm.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/chm/MLBS_",
+                                                            tile.numb[1], "_", tile.numb[2], "_chm.tif"), 
+              format = "GTiff")
+  
+  #max LAD raster
+  writeRaster(max.lad$max.lad.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/max_lad/MLBS_",
+                                                        tile.numb[1], "_", tile.numb[2], "_maxlad.tif"), 
+              format = "GTiff")
+  
+  #height of max LAD raster
+  writeRaster(max.lad$max.lad.ht.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/max_lad_height/MLBS_",
+                                                           tile.numb[1], "_", tile.numb[2], "_maxladheight.tif"), 
+              format = "GTiff")
+  
+  #filled voxel ratio raster
+  writeRaster(empty.filled.ratio$filled.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/filled_voxel_ratio/MLBS_",
+                                                                  tile.numb[1], "_", tile.numb[2], "_filledvoxelratio.tif"), 
+              format = "GTiff")
+  
+  #porosity voxel ratio raster
+  writeRaster(empty.filled.ratio$porosity.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/porosity_ratio/MLBS_",
+                                                                    tile.numb[1], "_", tile.numb[2], "_porosityratio.tif"), 
+              format = "GTiff")
+  
+  #standard deviation of LAD within a column
+  writeRaster(within.can.rugosity$vertical.sd.lad.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/sd_lad_column/MLBS_",
+                                                                            tile.numb[1], "_", tile.numb[2], "_sdladcolumn.tif"), 
+              format = "GTiff")
+
+  #height of lad at 10th quantile
+  writeRaster(ht.quantiles$quantile.10.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/quantile_10/MLBS_",
+                                                                 tile.numb[1], "_", tile.numb[2], "_quantile10.tif"), 
+              format = "GTiff")
+  
+  #height of lad at 25th quantile
+  writeRaster(ht.quantiles$quantile.25.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/quantile_25/MLBS_",
+                                                                 tile.numb[1], "_", tile.numb[2], "_quantile25.tif"), 
+              format = "GTiff")
+  
+  #height of lad at 50th quantile
+  writeRaster(ht.quantiles$quantile.50.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/quantile_50/MLBS_",
+                                                                 tile.numb[1], "_", tile.numb[2], "_quantile50.tif"), 
+              format = "GTiff")
+  
+  #height of lad at 75th quantile
+  writeRaster(ht.quantiles$quantile.75.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/quantile_75/MLBS_",
+                                                                 tile.numb[1], "_", tile.numb[2], "_quantile75.tif"), 
+              format = "GTiff")
+  
+  #height of lad at 90th quantile
+  writeRaster(ht.quantiles$quantile.90.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/quantile_90/MLBS_",
+                                                                 tile.numb[1], "_", tile.numb[2], "_quantile90.tif"), 
+              format = "GTiff")
+  
+  #height of mean lad
+  writeRaster(ht.quantiles$mean.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/mean_lad_height/MLBS_",
+                                                          tile.numb[1], "_", tile.numb[2], "_meanladheight.tif"), 
+              format = "GTiff")
+  
+  #euphotic zone volume in a column
+  writeRaster(can.volume$euphotic.volume.column.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/euphotic_volume/MLBS_",
+                                                                          tile.numb[1], "_", tile.numb[2], "_euphoticvolume.tif"), 
+              format = "GTiff")
+  
+  #euphotic zone total leaf area in a column
+  writeRaster(can.volume$euphotic.tla.column.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/euphotic_tla/MLBS_",
+                                                                       tile.numb[1], "_", tile.numb[2], "_euphotictla.tif"), 
+              format = "GTiff")
+    
+  #depth of euphotic zone in a column
+  writeRaster(euphotic.depth, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/euphotic_depth/MLBS_",
+                                                tile.numb[1], "_", tile.numb[2], "_euphoticdepth.tif"), 
+              format = "GTiff")
+  
+  #volume of oligophotic zone in a column
+  writeRaster(can.volume$oligophotic.volume.column.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/oligophotic_volume/MLBS_",
+                                                                             tile.numb[1], "_", tile.numb[2], "_oligophoticvolume.tif"), 
+              format = "GTiff")
+  
+  #oligophotic zone total leaf area in a column
+  writeRaster(can.volume$oligophotic.tla.column.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/oligophotic_tla/MLBS_",
+                                                                          tile.numb[1], "_", tile.numb[2], "_oligophotictla.tif"), 
+              format = "GTiff")
+  
+  #volume of empty space in a column
+  writeRaster(can.volume$empty.volume.column.raster, filename = paste0("D://Processed_Data/MLBS/2018/LiDAR/Individual_Tiles/empty_volume/MLBS_",
+                                                                       tile.numb[1], "_", tile.numb[2], "_emptyvolume.tif"), 
+              format = "GTiff")
+  
+  #-----------------------------------------------------------------------------------------
+  # Lets clean up some memory so we can run another tile
+  #-----------------------------------------------------------------------------------------
+  
+  gc()
+  rm(laz.data)
+  rm(level.canopy)
+  rm(lad.estimates)
+  rm(lad.raster)
+  rm(lai.raster)
+  rm(grd.can.rasters)
+  rm(max.lad)
+  rm(empty.filled.ratio)
+  rm(empty.filled.volume)
+  rm(within.can.rugosity)
+  rm(ht.quantiles)
+  rm(can.volume)
+  rm(euphotic.depth)
+  gc()
+  
+  print(paste0(length(laz.files.list) - i, " tiles remaining!"))
+}
+
+#-----------------------------------------------------------------------------------------
+# Let's merge together all the individual tiles into one giant raster
+#-----------------------------------------------------------------------------------------
+
+#list the folders that contain the rasters we want to stich together
+laz.folders <- list.dirs("D://Processed_Data/TALL/2018/LiDAR/Individual_Tiles")
+
+for (i in 2:length(laz.folders)) {
+  
+  #list all the files in the folder we want to process
+  rasters.list <- list.files(laz.folders[i], pattern=c("\\.tif$"), full.names = TRUE)
+  
+  #make an empty list
+  rst.list <- list()
+  
+  #load all the rasters into the list
+  for (q in 1:length(rasters.list)) {
+    rst<- raster(rasters.list[q])
+    
+    rst.list[[q]] <- rst
+  }
+  
+  # merge all the rasters together
+  merged.raster <- do.call(raster::merge, rst.list)
+  
+  #lets make the file name
+  file.name <- rasters.list[q]
+  tile.type <- strsplit(file.name, "/")[[1]][8]
+  
+  # write the raster to the folder
+  writeRaster(merged.raster, filename = paste0("D://Processed_Data/TALL/2018/LiDAR/Entire_Site/TALL_", tile.type), 
+              format = "GTiff")
+  
+  print(i)
+}
+
+#-----------------------------------------------------------------------------------------
+# Let's pass a 3x3 moving window over some of the rasters to make our last rasters
+#-----------------------------------------------------------------------------------------
+
+#within canopy rugosity - 3x3 moving window
+cr.rast <- raster("D://Processed_Data/MLBS/2018/LiDAR/Entire_Site/MLBS_sd_lad_column.tif")
+canopy.rugosity <- focal(cr.rast, w = matrix(1, nrow = 3, ncol = 3), fun = sd, na.rm = TRUE)
+writeRaster(canopy.rugosity, filename = "D://Processed_Data/MLBS/2018/LiDAR/Entire_Site/MLBS_within_canopy_rugosity.tif", 
+            format = "GTiff")
+
+#volume of empty space in a 3x3 moving window
+cemptv.rast <- raster("D://Processed_Data/MLBS/2018/LiDAR/Entire_Site/MLBS_empty_volume.tif")
+canopy.empty.vol <- focal(cemptv.rast, w = matrix(1, nrow = 3, ncol = 3), fun = sum, na.rm = TRUE)
+writeRaster(canopy.empty.vol, filename = "D://Processed_Data/MLBS/2018/LiDAR/Entire_Site/MLBS_canopy_empty_volume.tif", 
+            format = "GTiff")
+
+#volume of euphotic zone in a 3x3 moving window
+ceuphv.rast <- raster("D://Processed_Data/MLBS/2018/LiDAR/Entire_Site/MLBS_euphotic_volume.tif")
+canopy.euphotic.vol <- focal(ceuphv.rast, w = matrix(1, nrow = 3, ncol = 3), fun = sum, na.rm = TRUE)
+writeRaster(canopy.euphotic.vol, filename = "D://Processed_Data/MLBS/2018/LiDAR/Entire_Site/MLBS_canopy_euphotic_volume.tif", 
+            format = "GTiff")
+
+#volume of oligophotic zone in a 3x3 moving window
+cov.rast <- raster("D://Processed_Data/MLBS/2018/LiDAR/Entire_Site/MLBS_oligophotic_volume.tif")
+canopy.oligophotic.vol <- focal(cov.rast, w = matrix(1, nrow = 3, ncol = 3), fun = sum, na.rm = TRUE)
+writeRaster(canopy.oligophotic.vol, filename = "D://Processed_Data/MLBS/2018/LiDAR/Entire_Site/MLBS_canopy_oligophotic_volume.tif", 
+            format = "GTiff")
+
+#total leaf area in the euphotic zone within a 3x3 moving window
+cet.rast <- raster("D://Processed_Data/MLBS/2018/LiDAR/Entire_Site/MLBS_euphotic_tla.tif")
+canopy.euphotic.tla <- focal(cet.rast, w = matrix(1, nrow = 3, ncol = 3), fun = sum, na.rm = TRUE)
+writeRaster(canopy.euphotic.tla, filename = "D://Processed_Data/MLBS/2018/LiDAR/Entire_Site/MLBS_canopy_euphotic_tla.tif", 
+            format = "GTiff")
+
+#total leaf area in the oligophotic zone within a 3x3 moving window
+cot.rast <- raster("D://Processed_Data/MLBS/2018/LiDAR/Entire_Site/MLBS_oligophotic_tla.tif")
+canopy.oligophotic.tla <- focal(cot.rast, w = matrix(1, nrow = 3, ncol = 3), fun = sum, na.rm = TRUE)
+writeRaster(canopy.oligophotic.tla, filename = "D://Processed_Data/MLBS/2018/LiDAR/Entire_Site/MLBS_canopy_oligophotic_tla.tif", 
+            format = "GTiff")
+
+#top of canopy rugosity
+rugosity <- function(x) {
+  max.ht <- max(x)
+  diff.list <- list()
+  q <- 1
+  for (i in 1:length(x)){
+    ht.diff <- max.ht - x[i]
+    diff.list[[q]] <- ht.diff
+    q <- q + 1
+  }
+  tot.diff <- sum(unlist(diff.list), na.rm = TRUE) * 10 * 10 * 1
+  return(tot.diff)
+}
+
+chm.rast <- raster("D://Processed_Data/MLBS/2018/LiDAR/Entire_Site/MLBS_chm.tif")
+toc.rugosity <- focal(chm.rast, w = matrix(1, nrow = 3, ncol = 3), fun = rugosity)
+writeRaster(toc.rugosity, filename = "D://Processed_Data/MLBS/2018/LiDAR/Entire_Site/MLBS_toc_rugosity.tif", 
+            format = "GTiff")
+
