@@ -65,13 +65,22 @@ canopy.height.levelr <- function(lidar.array){
         #after the values we just moved over
         new.index <- length(cht.col) + 1
 
-        #lets add the appropriate number of zeros to the end of the vertical column so it
-        #matches the correct dimensions
-        cht.col[new.index:length(ch.col)] <- 0
+        #let's add an if statement to make sure that there actually needs to be zeros added to the end
+        if (new.index >= length(ch.col)) {
 
-        #lets save this vertical column to our empty array
-        chm.pulses[,q,z] <- cht.col
+          #lets save this vertical column to our empty array
+          chm.pulses[,q,z] <- cht.col
 
+        } else {
+
+          #lets add the appropriate number of zeros to the end of the vertical column so it
+          #matches the correct dimensions
+          cht.col[new.index:length(ch.col)] <- 0
+
+          #lets save this vertical column to our empty array
+          chm.pulses[,q,z] <- cht.col
+
+        }
       }
 
       #if there isn't a ground value then lets set all of that column to NA
