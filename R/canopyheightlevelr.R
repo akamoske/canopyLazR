@@ -66,7 +66,7 @@ canopy.height.levelr <- function(lidar.array){
         new.index <- length(cht.col) + 1
 
         #let's add an if statement to make sure that there actually needs to be zeros added to the end
-        if (new.index >= length(ch.col)) {
+        if (new.index > length(ch.col)) {
 
           #lets save this vertical column to our empty array
           chm.pulses[,q,z] <- cht.col
