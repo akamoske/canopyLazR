@@ -19,6 +19,11 @@ laz.to.array <- function(laz.file.path, voxel.resolution, z.resolution, use.clas
   laz.xyz.table <- as.data.frame(cbind(x=laz.data$X, y=laz.data$Y,
                                        z=laz.data$Z, class=laz.data$Classification))
 
+  #memory stuff
+  gc()
+  rm(laz.data)
+  gc()
+
   #lets remove the points that are deemed outliers - this will remove the noise from the dataset. We can use John Tukey's method here for outlier removal
   #where we can use 1.5 IQR since we are just working on preprocessing the data. More extreme data removal can happen later on and should be left up to
   #the individual user
@@ -32,6 +37,14 @@ laz.to.array <- function(laz.file.path, voxel.resolution, z.resolution, use.clas
 
   #lets remove these outliers now
   laz.xyz <- laz.xyz.table[(laz.xyz.table[,3] >= t.lower) & (laz.xyz.table[,3] <= t.upper),]
+
+  # memory stuff
+  gc()
+  rm(laz.xyz.table)
+  rm(stat.q)
+  rm(t.lower)
+  rm(t.upper)
+  gc()
 
   #lets create some boundary information for the x,y,z columns
   x.range.raw <- range(laz.xyz[,1], na.rm=T)
@@ -67,6 +80,12 @@ laz.to.array <- function(laz.file.path, voxel.resolution, z.resolution, use.clas
   y.cuts.dec <- y.cuts / (length(y.bin))
   x.y.cuts <- x.cuts + y.cuts.dec
 
+  # memory stuff
+  gc()
+  rm(x.cuts)
+  rm(y.cuts)
+  gc()
+
   #lets create a data frame that has two columns, one with the x index values and another
   #with the y index values in decimal form
   x.y.levels <- as.data.frame(expand.grid(1:(length(x.bin) - 1), (1:(length(y.bin) - 1)) / length(y.bin)))
@@ -89,6 +108,12 @@ laz.to.array <- function(laz.file.path, voxel.resolution, z.resolution, use.clas
   #lets bind this empty matrix with the lidar data frame
   xyz.table <- rbind(laz.xyz, xyz.matrix)
 
+  #memory stuff
+  gc()
+  rm(laz.xyz)
+  rm(xyz.matrix)
+  gc()
+
   #this determines the index number the z value of all lidar pulses,
   #so that each lidar pulse is assigned a vertical voxel to live in
   z.index <- c(z.cuts, rep(NA, length(x.y.levels.char)))
@@ -98,6 +123,11 @@ laz.to.array <- function(laz.file.path, voxel.resolution, z.resolution, use.clas
 
   #lets combine the lidar table, the x,y index values, and the z index values into a data frame
   lidar.table <- data.frame(xyz.table, x.y.index = x.y.index, z.index = z.index)
+
+  #memory stuff
+  gc()
+  rm(xyz.table)
+  gc()
 
   #lets create a function that populates the empty array that we will create later
   #this function will (for each factor in the data frame) seperate the pre-classified ground points
@@ -170,9 +200,6 @@ laz.to.array <- function(laz.file.path, voxel.resolution, z.resolution, use.clas
 
   #lets remove all the stuff we don't need anymore so that R doesn't have a melt down due to memory usage
   gc()
-  remove(laz.data)
-  remove(laz.xyz.table)
-  remove(laz.xyz)
   remove(lidar.table)
   remove(lidar.array)
   gc()
