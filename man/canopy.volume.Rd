@@ -28,8 +28,8 @@ you want to include all calculations}
 A list containing the quantile and mean rasters.
 }
 \description{
-This function reads in a the LAD estimates that were previously calculated, 
-calculates the height cutoff for the euphotic zone, calculates the volume and total leaf area of this 
+This function reads in a the LAD estimates that were previously calculated,
+calculates the height cutoff for the euphotic zone, calculates the volume and total leaf area of this
 portion of the canopy and then does the same for the remaining canopy. It then returns 5 rasters
 }
 \details{
