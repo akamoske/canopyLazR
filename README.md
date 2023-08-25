@@ -11,11 +11,10 @@ For theory behind the package please see the citation below. Please cite with us
 
 ### Corresponding Author
 
-Aaron G. Kamoske, PhD Candidate
+Dr. Aaron G. Kamoske
    
-  + [Michigan State University, Department of Geography, Environment, and Spatial Sciences](http://geo.msu.edu/)      
-  + [ERSAM Lab](https://www.ersamlab.com/)   
-  + akamoske@gmail.com
+  + [USDA Forest Service, National Adaptive Management Analyst]        
+  + aaron.kamoske@usda.gov
 
 ### Contributing Authors
 
